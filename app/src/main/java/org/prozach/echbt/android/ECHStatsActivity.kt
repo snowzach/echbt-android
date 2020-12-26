@@ -36,8 +36,10 @@ import org.prozach.echbt.android.ble.isReadable
 import org.prozach.echbt.android.ble.isWritable
 import org.prozach.echbt.android.ble.isWritableWithoutResponse
 import org.prozach.echbt.android.ble.toHexString
-import kotlinx.android.synthetic.main.activity_ble_operations.log_scroll_view
-import kotlinx.android.synthetic.main.activity_ble_operations.log_text_view
+import kotlinx.android.synthetic.main.activity_ech_stats.log_scroll_view
+import kotlinx.android.synthetic.main.activity_ech_stats.log_text_view
+import kotlinx.android.synthetic.main.activity_ech_stats.cadence
+import kotlinx.android.synthetic.main.activity_ech_stats.resistance
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.noButton
 import org.jetbrains.anko.selector
@@ -93,13 +95,15 @@ class ECHStatsActivity : AppCompatActivity() {
         }
 
         for (characteristic in characteristics) {
-            if (characteristic.uuid == sensorUUID) {
-                ConnectionManager.enableNotifications(device, characteristic)
-                log("Enabling notifications from ${characteristic.uuid}")
-            }
-            if (characteristic.uuid == writeUUID) {
-                ConnectionManager.writeCharacteristic(device, characteristic, byteArrayOfInts(0xF0, 0xB0, 0x01, 0x01, 0xA2))
-                log("Writing activation string to ${characteristic.uuid}")
+            when (characteristic.uuid) {
+                sensorUUID -> {
+                    ConnectionManager.enableNotifications(device, characteristic)
+                    log("Enabling notifications from ${characteristic.uuid}")
+                }
+                writeUUID -> {
+                    ConnectionManager.writeCharacteristic(device, characteristic, byteArrayOfInts(0xF0, 0xB0, 0x01, 0x01, 0xA2))
+                    log("Writing activation string to ${characteristic.uuid}")
+                }
             }
         }
     }
@@ -202,7 +206,27 @@ class ECHStatsActivity : AppCompatActivity() {
             }
 
             onCharacteristicChanged = { _, characteristic ->
-                log("Value changed on ${characteristic.uuid}: ${characteristic.value.toHexString()}")
+                when (characteristic.value[1].toByte()) {
+                    0xD1.toByte() -> {
+                        val cadenceVal = characteristic.value[9].toUInt().shl(8) + characteristic.value[10].toUInt()
+
+                        runOnUiThread {
+                            cadence.text = cadenceVal.toString()
+                        }
+                        log("Cadence")
+                    }
+                    0xD2.toByte() -> {
+                        val resistanceVal = characteristic.value[3].toUInt()
+
+                        runOnUiThread {
+                            resistance.text = resistanceVal.toString()
+                        }
+                        log("Resistance")
+                    }
+                    else -> {
+                        log("Value changed on ${characteristic.uuid}: ${characteristic.value.toHexString()}")
+                    }
+                }
             }
 
             onNotificationsEnabled = { _, characteristic ->
