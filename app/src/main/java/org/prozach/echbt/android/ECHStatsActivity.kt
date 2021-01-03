@@ -153,7 +153,7 @@ class ECHStatsActivity : AppCompatActivity() {
 
     fun enterPipMode() {
         val params = PictureInPictureParams.Builder()
-            .setAspectRatio(Rational(5, 4))
+            .setAspectRatio(Rational(3, 4))
             .build()
         pipButton.visibility = View.INVISIBLE
         exitButton.visibility = View.INVISIBLE

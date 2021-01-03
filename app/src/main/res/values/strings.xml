@@ -18,6 +18,9 @@
     <string name="app_name">EchBT Dashboard</string>
     <string name="echbt_dash">Echelon BT Dashboard</string>
     <string name="stats_header">Bike Stats</string>
+    <string name="resistance">Resistance</string>
+    <string name="power">Power</string>
+    <string name="cadence">Cadence</string>
     <string name="pip">Overlay Mode</string>
     <string name="exit">Exit</string>
 </resources>
