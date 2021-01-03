@@ -17,6 +17,6 @@
 
 <resources>
     <color name="colorPrimary">#00B0FF</color>
-    <color name="colorPrimaryDark">#0091EA</color>
+    <color name="colorPrimaryDark">#3C4245</color>
     <color name="colorAccent">#D81B60</color>
 </resources>

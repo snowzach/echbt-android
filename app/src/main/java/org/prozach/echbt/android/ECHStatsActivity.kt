@@ -18,11 +18,15 @@ package org.prozach.echbt.android
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.PictureInPictureParams
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothGattCharacteristic
 import android.content.Context
+import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import android.os.ParcelUuid
+import android.util.Rational
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -40,6 +44,9 @@ import kotlinx.android.synthetic.main.activity_ech_stats.log_scroll_view
 import kotlinx.android.synthetic.main.activity_ech_stats.log_text_view
 import kotlinx.android.synthetic.main.activity_ech_stats.cadence
 import kotlinx.android.synthetic.main.activity_ech_stats.resistance
+import kotlinx.android.synthetic.main.activity_ech_stats.power
+import kotlinx.android.synthetic.main.activity_ech_stats.pipButton
+import kotlinx.android.synthetic.main.activity_ech_stats.exitButton
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.noButton
 import org.jetbrains.anko.selector
@@ -48,11 +55,15 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import java.util.UUID
+import kotlin.math.pow
 
 class ECHStatsActivity : AppCompatActivity() {
 
     private val sensorUUID = java.util.UUID.fromString("0bf669f4-45f2-11e7-9598-0800200c9a66")
     private val writeUUID = java.util.UUID.fromString("0bf669f2-45f2-11e7-9598-0800200c9a66")
+
+    private var resistanceVal : UInt = 0u
+    private var cadenceVal : UInt = 0u
 
     private lateinit var device: BluetoothDevice
     private val dateFormatter = SimpleDateFormat("MMM d, HH:mm:ss", Locale.US)
@@ -94,6 +105,11 @@ class ECHStatsActivity : AppCompatActivity() {
             title = getString(R.string.echbt_dash)
         }
 
+        pipButton.setOnClickListener { enterPipMode() }
+        exitButton.setOnClickListener {
+            super.onBackPressed();
+        }
+
         for (characteristic in characteristics) {
             when (characteristic.uuid) {
                 sensorUUID -> {
@@ -124,6 +140,32 @@ class ECHStatsActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    override fun onPictureInPictureModeChanged(
+        isInPictureInPictureMode: Boolean, newConfig: Configuration?) {
+        super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
+        if (isInPictureInPictureMode) {
+
+        } else {
+            pipButton.visibility = View.VISIBLE
+            exitButton.visibility = View.VISIBLE
+        }
+    }
+
+    fun enterPipMode() {
+        val params = PictureInPictureParams.Builder()
+            .setAspectRatio(Rational(5, 4))
+            .build()
+        pipButton.visibility = View.INVISIBLE
+        exitButton.visibility = View.INVISIBLE
+        enterPictureInPictureMode(params)
+
+        // Trigger Home
+        val startMain = Intent(Intent.ACTION_MAIN)
+        startMain.addCategory(Intent.CATEGORY_HOME)
+        startMain.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(startMain)
+    }
+
     @SuppressLint("SetTextI18n")
     private fun log(message: String) {
         val formattedMessage = String.format("%s: %s", dateFormatter.format(Date()), message)
@@ -135,6 +177,29 @@ class ECHStatsActivity : AppCompatActivity() {
             }
             log_text_view.text = "$currentLogText\n$formattedMessage"
             log_scroll_view.post { log_scroll_view.fullScroll(View.FOCUS_DOWN) }
+        }
+    }
+
+    private fun updateCadence() {
+        runOnUiThread {
+            cadence.text = cadenceVal.toString()
+        }
+    }
+
+    private fun updateResistance() {
+        var r = ((0.0116058 * resistanceVal.toFloat().pow(3)) + (-0.568562 * resistanceVal.toFloat().pow(2)) + (10.4126 * resistanceVal.toFloat()) - 31.4807).toUInt()
+        runOnUiThread {
+            resistance.text = r.toString()
+        }
+    }
+
+    private fun updatePower() {
+        var p = 0u
+        if (resistanceVal > 0u && cadenceVal > 0u) {
+            p = (1.090112f.pow(resistanceVal.toFloat()) * 1.015343f.pow(cadenceVal.toFloat()) * 7.228958).toUInt()
+        }
+        runOnUiThread {
+            power.text = p.toString()
         }
     }
 
@@ -208,19 +273,15 @@ class ECHStatsActivity : AppCompatActivity() {
             onCharacteristicChanged = { _, characteristic ->
                 when (characteristic.value[1].toByte()) {
                     0xD1.toByte() -> {
-                        val cadenceVal = characteristic.value[9].toUInt().shl(8) + characteristic.value[10].toUInt()
-
-                        runOnUiThread {
-                            cadence.text = cadenceVal.toString()
-                        }
+                        cadenceVal = characteristic.value[9].toUInt().shl(8) + characteristic.value[10].toUInt()
+                        updateCadence()
+                        updatePower()
                         log("Cadence")
                     }
                     0xD2.toByte() -> {
-                        val resistanceVal = characteristic.value[3].toUInt()
-
-                        runOnUiThread {
-                            resistance.text = resistanceVal.toString()
-                        }
+                        resistanceVal = characteristic.value[3].toUInt()
+                        updateResistance()
+                        updatePower()
                         log("Resistance")
                     }
                     else -> {

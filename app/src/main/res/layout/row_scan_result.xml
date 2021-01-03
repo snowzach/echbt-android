@@ -21,36 +21,44 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground"
     android:padding="8dp"
-    android:background="?android:attr/selectableItemBackground">
+    tools:background="@android:color/background_dark"
+    >
 
     <TextView
         android:id="@+id/device_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@android:color/primary_text_dark"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:text="Device Name" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Device Name"
+        />
 
     <TextView
         android:id="@+id/mac_address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="14sp"
-        app:layout_constraintTop_toBottomOf="@id/device_name"
         app:layout_constraintStart_toStartOf="parent"
-        tools:text="MAC: XX:XX:XX:XX:XX" />
+        app:layout_constraintTop_toBottomOf="@id/device_name"
+        tools:text="MAC: XX:XX:XX:XX:XX"
+        tools:textColor="@android:color/primary_text_dark"
+        />
 
     <TextView
         android:id="@+id/signal_strength"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@android:color/primary_text_dark"
         android:textSize="14sp"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:text="-100 dBm" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="-100 dBm"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

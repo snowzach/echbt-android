@@ -37,7 +37,9 @@
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name="org.prozach.echbt.android.BleOperationsActivity"
             android:screenOrientation="portrait" />
-        <activity android:name="org.prozach.echbt.android.ECHStatsActivity"/>
+        <activity android:name="org.prozach.echbt.android.ECHStatsActivity"
+            android:supportsPictureInPicture="true"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation" />
         <activity android:name="org.prozach.echbt.android.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
