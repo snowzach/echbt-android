@@ -24,8 +24,11 @@ import android.bluetooth.BluetoothGattCharacteristic
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.ParcelUuid
+import android.provider.Settings
 import android.util.Rational
 import android.view.MenuItem
 import android.view.View
@@ -43,6 +46,7 @@ import org.prozach.echbt.android.ble.toHexString
 import kotlinx.android.synthetic.main.activity_ech_stats.log_scroll_view
 import kotlinx.android.synthetic.main.activity_ech_stats.log_text_view
 import kotlinx.android.synthetic.main.activity_ech_stats.cadence
+import kotlinx.android.synthetic.main.activity_ech_stats.debug_view
 import kotlinx.android.synthetic.main.activity_ech_stats.resistance
 import kotlinx.android.synthetic.main.activity_ech_stats.power
 import kotlinx.android.synthetic.main.activity_ech_stats.pipButton
@@ -64,6 +68,9 @@ class ECHStatsActivity : AppCompatActivity() {
 
     private var resistanceVal : UInt = 0u
     private var cadenceVal : UInt = 0u
+
+    private lateinit var simpleFloatingWindow: SimpleFloatingWindow
+    private var floatingWindowShown: Boolean = false
 
     private lateinit var device: BluetoothDevice
     private val dateFormatter = SimpleDateFormat("MMM d, HH:mm:ss", Locale.US)
@@ -99,13 +106,27 @@ class ECHStatsActivity : AppCompatActivity() {
             ?: error("Missing BluetoothDevice from MainActivity!")
 
         setContentView(R.layout.activity_ech_stats)
-        supportActionBar?.apply {
-            setDisplayHomeAsUpEnabled(true)
-            setDisplayShowTitleEnabled(true)
-            title = getString(R.string.echbt_dash)
+
+        if (BuildConfig.DEBUG) {
+            debug_view.visibility = View.VISIBLE
         }
 
-        pipButton.setOnClickListener { enterPipMode() }
+        simpleFloatingWindow = SimpleFloatingWindow(applicationContext)
+
+        pipButton.setOnClickListener {
+//            enterPipMode()
+            if (canDrawOverlays) {
+                simpleFloatingWindow.show()
+                floatingWindowShown = true
+
+                val startMain = Intent(Intent.ACTION_MAIN)
+                startMain.addCategory(Intent.CATEGORY_HOME)
+                startMain.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(startMain)
+            } else {
+                startManageDrawOverlaysPermission()
+            }
+        }
         exitButton.setOnClickListener {
             super.onBackPressed();
         }
@@ -140,31 +161,59 @@ class ECHStatsActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onPictureInPictureModeChanged(
-        isInPictureInPictureMode: Boolean, newConfig: Configuration?) {
-        super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
-        if (isInPictureInPictureMode) {
+//    override fun onPictureInPictureModeChanged(
+//        isInPictureInPictureMode: Boolean, newConfig: Configuration?) {
+//        super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
+//        if (isInPictureInPictureMode) {
+//
+//        } else {
+//            pipButton.visibility = View.VISIBLE
+//            exitButton.visibility = View.VISIBLE
+//        }
+//    }
 
-        } else {
-            pipButton.visibility = View.VISIBLE
-            exitButton.visibility = View.VISIBLE
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            REQUEST_CODE_DRAW_OVERLAY_PERMISSION -> {
+                if (canDrawOverlays) {
+                    simpleFloatingWindow.show()
+                } else {
+                    showToast("Permission is not granted!")
+                }
+            }
         }
     }
 
-    fun enterPipMode() {
-        val params = PictureInPictureParams.Builder()
-            .setAspectRatio(Rational(3, 4))
-            .build()
-        pipButton.visibility = View.INVISIBLE
-        exitButton.visibility = View.INVISIBLE
-        enterPictureInPictureMode(params)
-
-        // Trigger Home
-        val startMain = Intent(Intent.ACTION_MAIN)
-        startMain.addCategory(Intent.CATEGORY_HOME)
-        startMain.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        startActivity(startMain)
+    private fun startManageDrawOverlaysPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Intent(
+                Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                Uri.parse("package:${applicationContext.packageName}")
+            ).let {
+                startActivityForResult(it, REQUEST_CODE_DRAW_OVERLAY_PERMISSION)
+            }
+        }
     }
+
+    companion object {
+        private const val REQUEST_CODE_DRAW_OVERLAY_PERMISSION = 5
+    }
+
+//    fun enterPipMode() {
+//        val params = PictureInPictureParams.Builder()
+//            .setAspectRatio(Rational(3, 4))
+//            .build()
+//        pipButton.visibility = View.INVISIBLE
+//        exitButton.visibility = View.INVISIBLE
+//        enterPictureInPictureMode(params)
+//
+//        // Trigger Home
+//        val startMain = Intent(Intent.ACTION_MAIN)
+//        startMain.addCategory(Intent.CATEGORY_HOME)
+//        startMain.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+//        startActivity(startMain)
+//    }
 
     @SuppressLint("SetTextI18n")
     private fun log(message: String) {
@@ -181,6 +230,7 @@ class ECHStatsActivity : AppCompatActivity() {
     }
 
     private fun updateCadence() {
+        simpleFloatingWindow.setCadence(cadenceVal.toString())
         runOnUiThread {
             cadence.text = cadenceVal.toString()
         }
@@ -188,6 +238,7 @@ class ECHStatsActivity : AppCompatActivity() {
 
     private fun updateResistance() {
         var r = ((0.0116058 * resistanceVal.toFloat().pow(3)) + (-0.568562 * resistanceVal.toFloat().pow(2)) + (10.4126 * resistanceVal.toFloat()) - 31.4807).toUInt()
+        simpleFloatingWindow.setResistance(r.toString())
         runOnUiThread {
             resistance.text = r.toString()
         }
@@ -198,6 +249,7 @@ class ECHStatsActivity : AppCompatActivity() {
         if (resistanceVal > 0u && cadenceVal > 0u) {
             p = (1.090112f.pow(resistanceVal.toFloat()) * 1.015343f.pow(cadenceVal.toFloat()) * 7.228958).toUInt()
         }
+        simpleFloatingWindow.setPower(p.toString())
         runOnUiThread {
             power.text = p.toString()
         }
