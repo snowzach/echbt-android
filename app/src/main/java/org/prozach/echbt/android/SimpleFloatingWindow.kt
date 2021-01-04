@@ -16,8 +16,11 @@
 
 package org.prozach.echbt.android
 
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Context.WINDOW_SERVICE
+import android.content.Intent
+import android.content.IntentFilter
 import android.graphics.PixelFormat
 import android.os.Build
 import android.view.*
@@ -26,6 +29,7 @@ import kotlinx.android.synthetic.main.floating_window.view.resistance_float
 import kotlinx.android.synthetic.main.floating_window.view.power_float
 import kotlinx.android.synthetic.main.floating_window.view.cadence_float
 import kotlinx.android.synthetic.main.floating_window.view.title_float
+import kotlinx.coroutines.delay
 
 
 class SimpleFloatingWindow constructor(private val context: Context) {
@@ -36,8 +40,7 @@ class SimpleFloatingWindow constructor(private val context: Context) {
             return field
         }
 
-    private var floatView: View =
-        LayoutInflater.from(context).inflate(R.layout.floating_window, null)
+    private var floatView: View = LayoutInflater.from(context).inflate(R.layout.floating_window, null)
 
     private lateinit var layoutParams: WindowManager.LayoutParams
 
@@ -117,6 +120,9 @@ class SimpleFloatingWindow constructor(private val context: Context) {
             dismiss()
             isShowing = true
             windowManager?.addView(floatView, layoutParams)
+            val filter = IntentFilter()
+            filter.addAction("com.prozach.echbt.android.stats")
+            context.registerReceiver(broadcastHandler, filter)
         }
     }
 
@@ -124,23 +130,18 @@ class SimpleFloatingWindow constructor(private val context: Context) {
         if (isShowing) {
             windowManager?.removeView(floatView)
             isShowing = false
+            context.unregisterReceiver(broadcastHandler)
         }
     }
 
-    fun setCadence(v: String) {
-        with(floatView) {
-            cadence_float.text = v
+    private val broadcastHandler : BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            println("onReceive")
+            with(floatView) {
+                cadence_float.text = intent.getStringExtra("cadence")
+                resistance_float.text = intent.getStringExtra("resistance")
+                power_float.text = intent.getStringExtra("power")
+            }
         }
-    }
-    fun setResistance(v: String) {
-        with(floatView) {
-            resistance_float.text = v
-        }
-    }
-    fun setPower(v: String) {
-        with(floatView) {
-            power_float.text = v
-        }
-
     }
 }

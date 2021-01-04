@@ -15,7 +15,7 @@
   -->
 
 <resources>
-    <string name="app_name">EchBT Dashboard</string>
+    <string name="app_name">Echadence Dashboard</string>
     <string name="echbt_dash">Echelon BT Dashboard</string>
     <string name="stats_header">Bike Stats</string>
     <string name="resistance">Resistance</string>

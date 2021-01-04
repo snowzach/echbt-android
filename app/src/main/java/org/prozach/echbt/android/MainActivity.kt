@@ -31,9 +31,11 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.os.ParcelUuid
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
@@ -47,8 +49,6 @@ import timber.log.Timber
 
 private const val ENABLE_BLUETOOTH_REQUEST_CODE = 1
 private const val LOCATION_PERMISSION_REQUEST_CODE = 2
-
-
 
 class MainActivity : AppCompatActivity() {
 
@@ -242,11 +242,14 @@ class MainActivity : AppCompatActivity() {
     private val connectionEventListener by lazy {
         ConnectionEventListener().apply {
             onConnectionSetupComplete = { gatt ->
-                Intent(this@MainActivity, ECHStatsActivity::class.java).also {
+                Intent(this@MainActivity, ECHStatsService::class.java).also {
                     it.putExtra(BluetoothDevice.EXTRA_DEVICE, gatt.device)
-                    startActivity(it)
+                    startService(it)
                 }
                 ConnectionManager.unregisterListener(this)
+                Intent(this@MainActivity, ECHStatsActivity::class.java).also {
+                    startActivity(it)
+                }
             }
             onDisconnect = {
                 runOnUiThread {

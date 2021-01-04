@@ -30,17 +30,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/darker_gray"
+        android:paddingTop="8dp"
         android:text="@string/echbt_dash"
         android:textAlignment="center"
         android:textColor="@android:color/primary_text_dark"
         android:textSize="24sp"
+        tools:paddingBottom="8dp"
         />
 
     <Button
         android:id="@+id/scan_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Start Scan"
+        android:text="Scan For Devices"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2"
