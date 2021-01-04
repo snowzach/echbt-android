@@ -59,6 +59,8 @@ class ECHStatsActivity : AppCompatActivity() {
 
     private val dateFormatter = SimpleDateFormat("MMM d, HH:mm:ss", Locale.US)
 
+    private var receiverRegistered: Boolean = false
+
     companion object {
         private const val REQUEST_CODE_DRAW_OVERLAY_PERMISSION = 5
     }
@@ -72,6 +74,7 @@ class ECHStatsActivity : AppCompatActivity() {
             statsService = binder.getService()
             isBound = true
         }
+
         override fun onServiceDisconnected(name: ComponentName) {
             println("Activity Disconnected")
             isBound = false
@@ -87,6 +90,7 @@ class ECHStatsActivity : AppCompatActivity() {
         val filter = IntentFilter()
         filter.addAction("com.prozach.echbt.android.stats")
         registerReceiver(broadcastHandler, filter)
+        receiverRegistered = true
 
         simpleFloatingWindow = SimpleFloatingWindow(applicationContext)
 
@@ -94,6 +98,7 @@ class ECHStatsActivity : AppCompatActivity() {
             if (canDrawOverlays) {
                 simpleFloatingWindow.show()
                 floatingWindowShown = true
+                // Return to home screen
                 val startMain = Intent(Intent.ACTION_MAIN)
                 startMain.addCategory(Intent.CATEGORY_HOME)
                 startMain.flags = Intent.FLAG_ACTIVITY_NEW_TASK
@@ -107,7 +112,7 @@ class ECHStatsActivity : AppCompatActivity() {
         }
     }
 
-    private val broadcastHandler : BroadcastReceiver = object : BroadcastReceiver() {
+    private val broadcastHandler: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             println("onReceive")
             runOnUiThread {
@@ -121,19 +126,19 @@ class ECHStatsActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         unbindService(ECHStatsServiceConnection)
-        unregisterReceiver(broadcastHandler)
+        if (receiverRegistered) unregisterReceiver(broadcastHandler)
     }
 
     override fun onPause() {
         super.onPause()
-        unregisterReceiver(broadcastHandler)
+        if (receiverRegistered) unregisterReceiver(broadcastHandler)
     }
 
     override fun onResume() {
         super.onResume()
         val filter = IntentFilter()
         filter.addAction("com.prozach.echbt.android.stats")
-        registerReceiver(broadcastHandler, filter)
+        if (!receiverRegistered) registerReceiver(broadcastHandler, filter)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

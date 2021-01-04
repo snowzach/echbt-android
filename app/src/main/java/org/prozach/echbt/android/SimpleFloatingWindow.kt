@@ -93,6 +93,7 @@ class SimpleFloatingWindow constructor(private val context: Context) {
     }
 
     init {
+        println("init")
         with(floatView) {
             title_float.setOnClickListener { dismiss() }
         }
@@ -106,7 +107,7 @@ class SimpleFloatingWindow constructor(private val context: Context) {
             type = when {
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ->
                     WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
-                else -> WindowManager.LayoutParams.TYPE_TOAST
+                else -> WindowManager.LayoutParams.TYPE_PHONE
             }
 
             gravity = Gravity.CENTER
@@ -116,6 +117,7 @@ class SimpleFloatingWindow constructor(private val context: Context) {
     }
 
     fun show() {
+        println("show")
         if (context.canDrawOverlays) {
             dismiss()
             isShowing = true
