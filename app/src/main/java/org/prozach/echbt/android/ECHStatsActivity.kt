@@ -21,6 +21,7 @@ import kotlinx.android.synthetic.main.activity_ech_stats.resistance
 import kotlinx.android.synthetic.main.activity_ech_stats.power
 import kotlinx.android.synthetic.main.activity_ech_stats.pipButton
 import kotlinx.android.synthetic.main.activity_ech_stats.exitButton
+import kotlinx.android.synthetic.main.activity_ech_stats.pip_help
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -81,6 +82,13 @@ class ECHStatsActivity : AppCompatActivity() {
                 startManageDrawOverlaysPermission()
             }
         }
+
+        if (canDrawOverlays) {
+            pip_help.visibility = View.INVISIBLE
+        } else {
+            pip_help.visibility = View.VISIBLE
+        }
+
         exitButton.setOnClickListener {
             super.onBackPressed();
             stopService(Intent(this, ECHStatsService::class.java))
@@ -131,6 +139,13 @@ class ECHStatsActivity : AppCompatActivity() {
             REQUEST_CODE_DRAW_OVERLAY_PERMISSION -> {
                 if (canDrawOverlays) {
                     ECHStatsFloating.show()
+                    floatingWindowShown = true
+                    finish()
+                    // Return to home screen
+                    val startMain = Intent(Intent.ACTION_MAIN)
+                    startMain.addCategory(Intent.CATEGORY_HOME)
+                    startMain.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(startMain)
                 } else {
                     showToast("Permission is not granted!")
                 }

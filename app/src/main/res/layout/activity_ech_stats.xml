@@ -154,6 +154,17 @@
                 android:text="@string/exit"
                 />
 
+            <TextView
+                android:id="@+id/pip_help"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/pip_help"
+                android:textColor="@android:color/holo_red_dark"
+                android:textSize="18sp"
+                android:visibility="visible"
+                />
+
         </LinearLayout>
 
         <LinearLayout
