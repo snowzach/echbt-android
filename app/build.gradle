@@ -50,6 +50,7 @@ dependencies {
 
     implementation 'org.jetbrains.anko:anko:0.10.8'
     implementation 'com.jakewharton.timber:timber:4.7.1'
+    implementation 'com.google.android.material:material:1.2.1'
 
     ktlint "com.pinterest:ktlint:0.36.0"
 

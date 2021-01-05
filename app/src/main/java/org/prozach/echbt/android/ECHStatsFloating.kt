@@ -1,19 +1,3 @@
-/*
- * Copyright 2021 Punch Through Design LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package org.prozach.echbt.android
 
 import android.content.BroadcastReceiver
@@ -24,15 +8,14 @@ import android.content.IntentFilter
 import android.graphics.PixelFormat
 import android.os.Build
 import android.view.*
+import androidx.core.content.ContextCompat.startActivity
 import kotlin.math.abs
-import kotlinx.android.synthetic.main.floating_window.view.resistance_float
-import kotlinx.android.synthetic.main.floating_window.view.power_float
-import kotlinx.android.synthetic.main.floating_window.view.cadence_float
-import kotlinx.android.synthetic.main.floating_window.view.title_float
-import kotlinx.coroutines.delay
+import kotlinx.android.synthetic.main.floating_ech_stats.view.resistance_float
+import kotlinx.android.synthetic.main.floating_ech_stats.view.power_float
+import kotlinx.android.synthetic.main.floating_ech_stats.view.cadence_float
+import kotlinx.android.synthetic.main.floating_ech_stats.view.title_float
 
-
-class SimpleFloatingWindow constructor(private val context: Context) {
+class ECHStatsFloating constructor(private val context: Context) {
 
     private var windowManager: WindowManager? = null
         get() {
@@ -40,7 +23,8 @@ class SimpleFloatingWindow constructor(private val context: Context) {
             return field
         }
 
-    private var floatView: View = LayoutInflater.from(context).inflate(R.layout.floating_window, null)
+    private var floatView: View =
+        LayoutInflater.from(context).inflate(R.layout.floating_ech_stats, null)
 
     private lateinit var layoutParams: WindowManager.LayoutParams
 
@@ -93,9 +77,13 @@ class SimpleFloatingWindow constructor(private val context: Context) {
     }
 
     init {
-        println("init")
         with(floatView) {
-            title_float.setOnClickListener { dismiss() }
+            title_float.setOnClickListener {
+                val intent = Intent(context, ECHStatsActivity::class.java)
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(context, intent, null)
+                dismiss()
+            }
         }
 
         floatView.setOnTouchListener(onTouchListener)
@@ -136,7 +124,7 @@ class SimpleFloatingWindow constructor(private val context: Context) {
         }
     }
 
-    private val broadcastHandler : BroadcastReceiver = object : BroadcastReceiver() {
+    private val broadcastHandler: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             println("onReceive")
             with(floatView) {

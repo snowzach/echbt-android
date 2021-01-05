@@ -1,7 +1,5 @@
 package org.prozach.echbt.android
 
-import android.annotation.SuppressLint
-import android.app.IntentService
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -12,22 +10,13 @@ import android.content.Intent
 import android.os.Binder
 import android.os.Build
 import android.os.IBinder
-import android.view.View
-import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import org.prozach.echbt.android.ble.ConnectionEventListener
 import org.prozach.echbt.android.ble.ConnectionManager
 import org.prozach.echbt.android.ble.toHexString
-import java.util.Date
 import java.util.Locale
 import java.util.UUID
-import java.util.concurrent.locks.ReentrantLock
-import kotlin.concurrent.withLock
-import kotlin.coroutines.suspendCoroutine
 import kotlin.math.pow
 
 class ECHStatsService : Service() {
@@ -58,6 +47,7 @@ class ECHStatsService : Service() {
             startIntent.putExtra("inputExtra", message)
             ContextCompat.startForegroundService(context, startIntent)
         }
+
         fun stopService(context: Context) {
             val stopIntent = Intent(context, ECHStatsService::class.java)
             context.stopService(stopIntent)
@@ -66,8 +56,10 @@ class ECHStatsService : Service() {
 
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val serviceChannel = NotificationChannel(CHANNEL_ID, "Foreground Service Channel",
-                NotificationManager.IMPORTANCE_DEFAULT)
+            val serviceChannel = NotificationChannel(
+                CHANNEL_ID, "Foreground Service Channel",
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
             val manager = getSystemService(NotificationManager::class.java)
             manager!!.createNotificationChannel(serviceChannel)
         }
@@ -88,8 +80,8 @@ class ECHStatsService : Service() {
         )
         val notification = NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentTitle(this.resources.getString(R.string.app_name))
-            .setContentText(this.resources.getString(R.string.app_name))
-            .setSmallIcon(R.mipmap.ic_cadence)
+            .setContentText("Bike Stats collection running...")
+            .setSmallIcon(R.mipmap.ic_cadence_white)
             .setContentIntent(pendingIntent)
             .build()
         startForeground(1, notification)
@@ -123,7 +115,7 @@ class ECHStatsService : Service() {
     }
 
     inner class ECHStatsBinder : Binder() {
-        fun getService() : ECHStatsService {
+        fun getService(): ECHStatsService {
             return this@ECHStatsService
         }
     }
@@ -203,11 +195,15 @@ class ECHStatsService : Service() {
     private fun sendLocalBroadcast() {
         var intent = Intent("com.prozach.echbt.android.stats");
         intent.putExtra("cadence", cadenceVal.toString());
-        var r = ((0.0116058 * resistanceVal.toFloat().pow(3)) + (-0.568562 * resistanceVal.toFloat().pow(2)) + (10.4126 * resistanceVal.toFloat()) - 31.4807).toUInt()
+        var r = ((0.0116058 * resistanceVal.toFloat().pow(3)) + (-0.568562 * resistanceVal.toFloat()
+            .pow(
+                2
+            )) + (10.4126 * resistanceVal.toFloat()) - 31.4807).toUInt()
         intent.putExtra("resistance", r.toString());
         var p = 0u
         if (resistanceVal > 0u && cadenceVal > 0u) {
-            p = (1.090112f.pow(resistanceVal.toFloat()) * 1.015343f.pow(cadenceVal.toFloat()) * 7.228958).toUInt()
+            p =
+                (1.090112f.pow(resistanceVal.toFloat()) * 1.015343f.pow(cadenceVal.toFloat()) * 7.228958).toUInt()
         }
         intent.putExtra("power", p.toString());
         sendBroadcast(intent)
@@ -217,5 +213,6 @@ class ECHStatsService : Service() {
     private fun String.hexToBytes() =
         this.chunked(2).map { it.toUpperCase(Locale.US).toInt(16).toByte() }.toByteArray()
 
-    private fun byteArrayOfInts(vararg ints: Int) = ByteArray(ints.size) { pos -> ints[pos].toByte() }
+    private fun byteArrayOfInts(vararg ints: Int) =
+        ByteArray(ints.size) { pos -> ints[pos].toByte() }
 }

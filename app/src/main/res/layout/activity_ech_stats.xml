@@ -28,7 +28,6 @@
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@android:color/background_dark"
         android:orientation="vertical"
         android:padding="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -42,7 +41,8 @@
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/darker_gray"
+            android:background="@android:color/holo_orange_dark"
+            android:padding="3dp"
             android:text="@string/stats_header"
             android:textAlignment="center"
             android:textColor="@android:color/primary_text_light"
@@ -61,7 +61,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight=".2"
                 android:contentDescription="@string/cadence"
-                app:srcCompat="@mipmap/ic_cadence"
+                app:srcCompat="@mipmap/ic_cadence_black"
                 />
 
             <TextView
@@ -71,7 +71,7 @@
                 android:layout_weight=".8"
                 android:paddingStart="5dp"
                 android:paddingEnd="0dp"
-                android:textColor="@android:color/primary_text_dark"
+                android:textColor="@android:color/primary_text_light"
                 android:textSize="30sp"
                 />
 
@@ -89,7 +89,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight=".2"
                 android:contentDescription="@string/resistance"
-                app:srcCompat="@mipmap/ic_resistance"
+                app:srcCompat="@mipmap/ic_resistance_black"
                 />
 
             <TextView
@@ -99,7 +99,7 @@
                 android:layout_weight=".8"
                 android:paddingStart="5dp"
                 android:paddingEnd="0dp"
-                android:textColor="@android:color/primary_text_dark"
+                android:textColor="@android:color/primary_text_light"
                 android:textSize="30sp"
                 />
 
@@ -117,7 +117,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight=".2"
                 android:contentDescription="@string/power"
-                app:srcCompat="@mipmap/ic_power"
+                app:srcCompat="@mipmap/ic_power_black"
                 />
 
             <TextView
@@ -128,7 +128,7 @@
                 android:contentDescription="@string/power"
                 android:paddingStart="5dp"
                 android:paddingEnd="0dp"
-                android:textColor="@android:color/primary_text_dark"
+                android:textColor="@android:color/primary_text_light"
                 android:textSize="30sp"
                 />
 

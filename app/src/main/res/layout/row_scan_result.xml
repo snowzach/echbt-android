@@ -22,15 +22,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?android:attr/selectableItemBackground"
-    android:padding="8dp"
-    tools:background="@android:color/background_dark"
+    android:padding="10dp"
     >
 
     <TextView
         android:id="@+id/device_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@android:color/primary_text_dark"
+        android:textColor="@android:color/primary_text_light"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -42,18 +41,18 @@
         android:id="@+id/mac_address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@android:color/primary_text_light"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/device_name"
         tools:text="MAC: XX:XX:XX:XX:XX"
-        tools:textColor="@android:color/primary_text_dark"
         />
 
     <TextView
         android:id="@+id/signal_strength"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@android:color/primary_text_dark"
+        android:textColor="@android:color/primary_text_light"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

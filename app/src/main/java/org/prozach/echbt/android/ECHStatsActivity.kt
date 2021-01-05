@@ -1,60 +1,33 @@
 package org.prozach.echbt.android
 
 import android.annotation.SuppressLint
-import android.app.Activity
-import android.app.PictureInPictureParams
-import android.app.Service
-import android.bluetooth.BluetoothDevice
-import android.bluetooth.BluetoothGattCharacteristic
 import android.content.BroadcastReceiver
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.ServiceConnection
-import android.content.res.Configuration
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
-import android.os.ParcelUuid
 import android.provider.Settings
-import android.util.Rational
-import android.view.MenuItem
 import android.view.View
-import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
-import org.prozach.echbt.android.ble.ConnectionEventListener
-import org.prozach.echbt.android.ble.ConnectionManager
-import org.prozach.echbt.android.ble.isIndicatable
-import org.prozach.echbt.android.ble.isNotifiable
-import org.prozach.echbt.android.ble.isReadable
-import org.prozach.echbt.android.ble.isWritable
-import org.prozach.echbt.android.ble.isWritableWithoutResponse
-import org.prozach.echbt.android.ble.toHexString
 import kotlinx.android.synthetic.main.activity_ech_stats.log_scroll_view
 import kotlinx.android.synthetic.main.activity_ech_stats.log_text_view
 import kotlinx.android.synthetic.main.activity_ech_stats.cadence
-import kotlinx.android.synthetic.main.activity_ech_stats.debug_view
 import kotlinx.android.synthetic.main.activity_ech_stats.resistance
 import kotlinx.android.synthetic.main.activity_ech_stats.power
 import kotlinx.android.synthetic.main.activity_ech_stats.pipButton
 import kotlinx.android.synthetic.main.activity_ech_stats.exitButton
-import org.jetbrains.anko.alert
-import org.jetbrains.anko.noButton
-import org.jetbrains.anko.selector
-import org.jetbrains.anko.yesButton
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import java.util.UUID
-import kotlin.math.pow
 
 class ECHStatsActivity : AppCompatActivity() {
 
-    private lateinit var simpleFloatingWindow: SimpleFloatingWindow
+    private lateinit var ECHStatsFloating: ECHStatsFloating
     private var floatingWindowShown: Boolean = false
 
     private val dateFormatter = SimpleDateFormat("MMM d, HH:mm:ss", Locale.US)
@@ -92,12 +65,13 @@ class ECHStatsActivity : AppCompatActivity() {
         registerReceiver(broadcastHandler, filter)
         receiverRegistered = true
 
-        simpleFloatingWindow = SimpleFloatingWindow(applicationContext)
+        ECHStatsFloating = ECHStatsFloating(applicationContext)
 
         pipButton.setOnClickListener {
             if (canDrawOverlays) {
-                simpleFloatingWindow.show()
+                ECHStatsFloating.show()
                 floatingWindowShown = true
+                finish()
                 // Return to home screen
                 val startMain = Intent(Intent.ACTION_MAIN)
                 startMain.addCategory(Intent.CATEGORY_HOME)
@@ -109,6 +83,7 @@ class ECHStatsActivity : AppCompatActivity() {
         }
         exitButton.setOnClickListener {
             super.onBackPressed();
+            stopService(Intent(this, ECHStatsService::class.java))
         }
     }
 
@@ -126,19 +101,28 @@ class ECHStatsActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         unbindService(ECHStatsServiceConnection)
-        if (receiverRegistered) unregisterReceiver(broadcastHandler)
+        if (receiverRegistered) {
+            unregisterReceiver(broadcastHandler)
+            receiverRegistered = false
+        }
     }
 
     override fun onPause() {
         super.onPause()
-        if (receiverRegistered) unregisterReceiver(broadcastHandler)
+        if (receiverRegistered) {
+            unregisterReceiver(broadcastHandler)
+            receiverRegistered = false
+        }
     }
 
     override fun onResume() {
         super.onResume()
         val filter = IntentFilter()
         filter.addAction("com.prozach.echbt.android.stats")
-        if (!receiverRegistered) registerReceiver(broadcastHandler, filter)
+        if (!receiverRegistered) {
+            registerReceiver(broadcastHandler, filter)
+            receiverRegistered = true
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -146,7 +130,7 @@ class ECHStatsActivity : AppCompatActivity() {
         when (requestCode) {
             REQUEST_CODE_DRAW_OVERLAY_PERMISSION -> {
                 if (canDrawOverlays) {
-                    simpleFloatingWindow.show()
+                    ECHStatsFloating.show()
                 } else {
                     showToast("Permission is not granted!")
                 }
