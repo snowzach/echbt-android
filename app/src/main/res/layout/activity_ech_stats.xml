@@ -68,7 +68,45 @@
                 android:id="@+id/cadence"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight=".8"
+                android:layout_weight=".2"
+                android:paddingStart="5dp"
+                android:paddingEnd="0dp"
+                android:textColor="@android:color/primary_text_light"
+                android:textSize="30sp"
+                />
+
+            <TextView
+                android:id="@+id/tv_cadence_avg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight=".1"
+                android:text="@string/avg"
+                />
+
+            <TextView
+                android:id="@+id/cadence_avg"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight=".2"
+                android:paddingStart="5dp"
+                android:paddingEnd="0dp"
+                android:textColor="@android:color/primary_text_light"
+                android:textSize="30sp"
+                />
+
+            <TextView
+                android:id="@+id/tv_cadence_max"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight=".1"
+                android:text="@string/max"
+                />
+
+            <TextView
+                android:id="@+id/cadence_max"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight=".2"
                 android:paddingStart="5dp"
                 android:paddingEnd="0dp"
                 android:textColor="@android:color/primary_text_light"
@@ -96,7 +134,45 @@
                 android:id="@+id/resistance"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight=".8"
+                android:layout_weight=".2"
+                android:paddingStart="5dp"
+                android:paddingEnd="0dp"
+                android:textColor="@android:color/primary_text_light"
+                android:textSize="30sp"
+                />
+
+            <TextView
+                android:id="@+id/tv_resistance_avg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight=".1"
+                android:text="@string/avg"
+                />
+
+            <TextView
+                android:id="@+id/resistance_avg"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight=".2"
+                android:paddingStart="5dp"
+                android:paddingEnd="0dp"
+                android:textColor="@android:color/primary_text_light"
+                android:textSize="30sp"
+                />
+
+            <TextView
+                android:id="@+id/tv_resistance_max"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight=".1"
+                android:text="@string/max"
+                />
+
+            <TextView
+                android:id="@+id/resistance_max"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight=".2"
                 android:paddingStart="5dp"
                 android:paddingEnd="0dp"
                 android:textColor="@android:color/primary_text_light"
@@ -124,7 +200,47 @@
                 android:id="@+id/power"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight=".8"
+                android:layout_weight=".2"
+                android:contentDescription="@string/power"
+                android:paddingStart="5dp"
+                android:paddingEnd="0dp"
+                android:textColor="@android:color/primary_text_light"
+                android:textSize="30sp"
+                />
+
+            <TextView
+                android:id="@+id/tv_power_avg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight=".1"
+                android:text="@string/avg"
+                />
+
+            <TextView
+                android:id="@+id/power_avg"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight=".2"
+                android:contentDescription="@string/power"
+                android:paddingStart="5dp"
+                android:paddingEnd="0dp"
+                android:textColor="@android:color/primary_text_light"
+                android:textSize="30sp"
+                />
+
+            <TextView
+                android:id="@+id/tv_power_max"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight=".1"
+                android:text="@string/max"
+                />
+
+            <TextView
+                android:id="@+id/power_max"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight=".2"
                 android:contentDescription="@string/power"
                 android:paddingStart="5dp"
                 android:paddingEnd="0dp"
@@ -140,11 +256,46 @@
             android:orientation="vertical"
             >
 
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                >
+
+                <TextView
+                    android:id="@+id/stats_format"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/stats_format"
+                    />
+
+                <RadioButton
+                    android:id="@+id/stats_format_echelon"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/echelon"
+                    />
+
+                <RadioButton
+                    android:id="@+id/stats_format_peleton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="@string/peloton"
+                    />
+            </RadioGroup>
+
             <Button
                 android:id="@+id/pipButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/pip"
+                />
+
+            <Button
+                android:id="@+id/clearStats"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/clear"
                 />
 
             <Button

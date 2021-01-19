@@ -37,7 +37,32 @@ class ECHStatsService : Service() {
     private var notifyingCharacteristics = mutableListOf<UUID>()
 
     private var resistanceVal: UInt = 0u
+    private var resistanceMax: UInt = 0u
+    private var resistanceTotal: UInt = 0u
     private var cadenceVal: UInt = 0u
+    private var cadenceMax: UInt = 0u
+    private var cadenceTotal: UInt = 0u
+    private var powerMax: UInt = 0u
+    private var statCount: UInt = 0u
+    private var statsFormat: StatsFormat = StatsFormat.PELOTON;
+
+    enum class StatsFormat {
+        ECHELON, PELOTON
+    }
+
+    fun setStatsFormat(sf: StatsFormat) {
+        statsFormat = sf
+        powerMax = 0.toUInt()
+    }
+
+    fun clearStats() {
+        resistanceMax = 0.toUInt()
+        resistanceTotal = 0.toUInt()
+        cadenceMax = 0.toUInt()
+        cadenceTotal = 0.toUInt()
+        powerMax = 0.toUInt()
+        statCount = 0.toUInt()
+    }
 
     // Helpers to start/stop
     // https://androidwave.com/foreground-service-android-example-in-kotlin/
@@ -164,6 +189,11 @@ class ECHStatsService : Service() {
                         log("Value changed on ${characteristic.uuid}: ${characteristic.value.toHexString()}")
                     }
                 }
+                if(cadenceVal > 0.toUInt()) {
+                    statCount++
+                    cadenceTotal += cadenceVal
+                    resistanceTotal += resistanceVal
+                }
             }
 
             onNotificationsEnabled = { _, characteristic ->
@@ -193,21 +223,69 @@ class ECHStatsService : Service() {
     }
 
     private fun sendLocalBroadcast() {
+
         var intent = Intent("com.prozach.echbt.android.stats");
-        intent.putExtra("cadence", cadenceVal.toString());
-        var r = ((0.0116058 * resistanceVal.toFloat().pow(3)) + (-0.568562 * resistanceVal.toFloat()
-            .pow(
-                2
-            )) + (10.4126 * resistanceVal.toFloat()) - 31.4807).toUInt()
-        intent.putExtra("resistance", r.toString());
-        var p = 0u
-        if (resistanceVal > 0u && cadenceVal > 0u) {
-            p =
-                (1.090112f.pow(resistanceVal.toFloat()) * 1.015343f.pow(cadenceVal.toFloat()) * 7.228958).toUInt()
+
+        if(cadenceVal > cadenceMax) {
+            cadenceMax = cadenceVal
         }
-        intent.putExtra("power", p.toString());
+        if(resistanceVal > resistanceMax) {
+            resistanceMax = resistanceVal
+        }
+
+        // Cadence
+        intent.putExtra("cadence", cadenceVal.toString());
+        intent.putExtra("cadence_max", cadenceMax.toString());
+        if(statCount > 0.toUInt()) {
+            intent.putExtra("cadence_avg", (cadenceTotal / statCount).toUInt().toString());
+        } else {
+            intent.putExtra("cadence_avg", 0.toString());
+        }
+
+        // Resistance
+        intent.putExtra("resistance", calcResistance(resistanceVal).toString());
+        if(statCount > 0.toUInt()) {
+            intent.putExtra("resistance_avg", calcResistance(resistanceTotal / statCount).toString());
+        } else {
+            intent.putExtra("resistance_avg", calcResistance(resistanceVal).toString());
+        }
+        intent.putExtra("resistance_max", calcResistance(resistanceMax).toString());
+
+        // Power
+        var power = calcPower(cadenceVal, resistanceVal)
+        if(power > powerMax) {
+            powerMax = power
+        }
+        intent.putExtra("power", power.toString());
+        if(statCount > 0.toUInt()) {
+            intent.putExtra("power_avg", calcPower(cadenceTotal / statCount, resistanceTotal / statCount).toString());
+        } else {
+            intent.putExtra("power_avg", 0.toString());
+        }
+        intent.putExtra("power_max", powerMax.toString());
+
         sendBroadcast(intent)
         println("sendLocalBroadcast")
+    }
+
+    private fun calcResistance(r: UInt): UInt {
+        when (statsFormat) {
+            StatsFormat.PELOTON -> {
+                return ((0.0116058 * r.toFloat()
+                    .pow(3)) + (-0.568562 * r.toFloat()
+                    .pow(2)) + (10.4126 * r.toFloat()) - 31.4807).toUInt()
+            }
+            StatsFormat.ECHELON -> {
+                return r
+            }
+        }
+    }
+
+    private fun calcPower(c: UInt, r: UInt): UInt {
+        if (r == 0u || c == 0u) {
+            return 0.toUInt()
+        }
+        return (1.090112f.pow(r.toFloat()) * 1.015343f.pow(c.toFloat()) * 7.228958).toUInt()
     }
 
     private fun String.hexToBytes() =

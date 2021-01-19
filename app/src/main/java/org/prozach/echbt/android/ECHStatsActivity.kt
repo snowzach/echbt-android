@@ -17,11 +17,20 @@ import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_ech_stats.log_scroll_view
 import kotlinx.android.synthetic.main.activity_ech_stats.log_text_view
 import kotlinx.android.synthetic.main.activity_ech_stats.cadence
+import kotlinx.android.synthetic.main.activity_ech_stats.cadence_avg
+import kotlinx.android.synthetic.main.activity_ech_stats.cadence_max
+import kotlinx.android.synthetic.main.activity_ech_stats.clearStats
 import kotlinx.android.synthetic.main.activity_ech_stats.resistance
+import kotlinx.android.synthetic.main.activity_ech_stats.resistance_avg
+import kotlinx.android.synthetic.main.activity_ech_stats.resistance_max
 import kotlinx.android.synthetic.main.activity_ech_stats.power
+import kotlinx.android.synthetic.main.activity_ech_stats.power_avg
+import kotlinx.android.synthetic.main.activity_ech_stats.power_max
 import kotlinx.android.synthetic.main.activity_ech_stats.pipButton
 import kotlinx.android.synthetic.main.activity_ech_stats.exitButton
 import kotlinx.android.synthetic.main.activity_ech_stats.pip_help
+import kotlinx.android.synthetic.main.activity_ech_stats.stats_format_echelon
+import kotlinx.android.synthetic.main.activity_ech_stats.stats_format_peleton
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -93,15 +102,34 @@ class ECHStatsActivity : AppCompatActivity() {
             super.onBackPressed();
             stopService(Intent(this, ECHStatsService::class.java))
         }
+
+        clearStats.setOnClickListener{
+            statsService?.clearStats()
+        }
+
+        stats_format_echelon.setOnClickListener{
+            statsService?.setStatsFormat(ECHStatsService.StatsFormat.ECHELON)
+        }
+        stats_format_peleton.setOnClickListener{
+            statsService?.setStatsFormat(ECHStatsService.StatsFormat.PELOTON)
+        }
     }
+
+
 
     private val broadcastHandler: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             println("onReceive")
             runOnUiThread {
                 cadence.text = intent.getStringExtra("cadence")
+                cadence_avg.text = intent.getStringExtra("cadence_avg")
+                cadence_max.text = intent.getStringExtra("cadence_max")
                 resistance.text = intent.getStringExtra("resistance")
+                resistance_avg.text = intent.getStringExtra("resistance_avg")
+                resistance_max.text = intent.getStringExtra("resistance_max")
                 power.text = intent.getStringExtra("power")
+                power_avg.text = intent.getStringExtra("power_avg")
+                power_max.text = intent.getStringExtra("power_max")
             }
         }
     }
