@@ -59,59 +59,79 @@
                 android:id="@+id/ic_cadence"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight=".2"
+                android:layout_weight=".25"
                 android:contentDescription="@string/cadence"
                 app:srcCompat="@mipmap/ic_cadence_black"
                 />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".25"
+                android:orientation="vertical"
+                >
+
+                <TextView
+                    android:id="@+id/tv_cadence_avg"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/avg"
+                    android:textAlignment="center"
+                    android:textSize="12sp"
+                    />
+
+                <TextView
+                    android:id="@+id/cadence_avg"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="0dp"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/primary_text_light"
+                    android:textSize="20sp"
+                    />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/cadence"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight=".2"
+                android:layout_weight=".25"
                 android:paddingStart="5dp"
                 android:paddingEnd="0dp"
+                android:textAlignment="center"
                 android:textColor="@android:color/primary_text_light"
                 android:textSize="30sp"
                 />
 
-            <TextView
-                android:id="@+id/tv_cadence_avg"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight=".1"
-                android:text="@string/avg"
-                />
-
-            <TextView
-                android:id="@+id/cadence_avg"
+            <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight=".2"
-                android:paddingStart="5dp"
-                android:paddingEnd="0dp"
-                android:textColor="@android:color/primary_text_light"
-                android:textSize="30sp"
-                />
+                android:layout_height="match_parent"
+                android:layout_weight=".25"
+                android:orientation="vertical"
+                >
 
-            <TextView
-                android:id="@+id/tv_cadence_max"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight=".1"
-                android:text="@string/max"
-                />
+                <TextView
+                    android:id="@+id/tv_cadence_max"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/max"
+                    android:textAlignment="center"
+                    android:textSize="12sp"
+                    />
 
-            <TextView
-                android:id="@+id/cadence_max"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight=".2"
-                android:paddingStart="5dp"
-                android:paddingEnd="0dp"
-                android:textColor="@android:color/primary_text_light"
-                android:textSize="30sp"
-                />
+                <TextView
+                    android:id="@+id/cadence_max"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="0dp"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/primary_text_light"
+                    android:textSize="20sp"
+                    />
+
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -125,59 +145,78 @@
                 android:id="@+id/ic_resistance"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight=".2"
+                android:layout_weight=".25"
                 android:contentDescription="@string/resistance"
                 app:srcCompat="@mipmap/ic_resistance_black"
                 />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".25"
+                android:orientation="vertical"
+                >
+
+                <TextView
+                    android:id="@+id/tv_resistance_avg"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/avg"
+                    android:textAlignment="center"
+                    android:textSize="12sp"
+                    />
+
+                <TextView
+                    android:id="@+id/resistance_avg"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="0dp"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/primary_text_light"
+                    android:textSize="20sp"
+                    />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/resistance"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight=".2"
+                android:layout_weight=".25"
                 android:paddingStart="5dp"
                 android:paddingEnd="0dp"
+                android:textAlignment="center"
                 android:textColor="@android:color/primary_text_light"
                 android:textSize="30sp"
                 />
 
-            <TextView
-                android:id="@+id/tv_resistance_avg"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight=".1"
-                android:text="@string/avg"
-                />
-
-            <TextView
-                android:id="@+id/resistance_avg"
+            <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight=".2"
-                android:paddingStart="5dp"
-                android:paddingEnd="0dp"
-                android:textColor="@android:color/primary_text_light"
-                android:textSize="30sp"
-                />
+                android:layout_height="match_parent"
+                android:layout_weight=".25"
+                android:orientation="vertical"
+                >
 
-            <TextView
-                android:id="@+id/tv_resistance_max"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight=".1"
-                android:text="@string/max"
-                />
+                <TextView
+                    android:id="@+id/tv_resistance_max"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/max"
+                    android:textAlignment="center"
+                    android:textSize="12sp"
+                    />
 
-            <TextView
-                android:id="@+id/resistance_max"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight=".2"
-                android:paddingStart="5dp"
-                android:paddingEnd="0dp"
-                android:textColor="@android:color/primary_text_light"
-                android:textSize="30sp"
-                />
+                <TextView
+                    android:id="@+id/resistance_max"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="0dp"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/primary_text_light"
+                    android:textSize="20sp"
+                    />
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -191,56 +230,104 @@
                 android:id="@+id/ic_power"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight=".2"
+                android:layout_weight=".25"
                 android:contentDescription="@string/power"
                 app:srcCompat="@mipmap/ic_power_black"
                 />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".25"
+                android:orientation="vertical"
+                >
+
+                <TextView
+                    android:id="@+id/tv_power_avg"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/avg"
+                    android:textAlignment="center"
+                    android:textSize="12sp"
+                    />
+
+                <TextView
+                    android:id="@+id/power_avg"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/power"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="0dp"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/primary_text_light"
+                    android:textSize="20sp"
+                    />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/power"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight=".2"
+                android:layout_weight=".25"
                 android:contentDescription="@string/power"
                 android:paddingStart="5dp"
                 android:paddingEnd="0dp"
+                android:textAlignment="center"
                 android:textColor="@android:color/primary_text_light"
                 android:textSize="30sp"
                 />
 
-            <TextView
-                android:id="@+id/tv_power_avg"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight=".1"
-                android:text="@string/avg"
-                />
-
-            <TextView
-                android:id="@+id/power_avg"
+            <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight=".2"
+                android:layout_height="match_parent"
+                android:layout_weight=".25"
+                android:orientation="vertical"
+                >
+
+                <TextView
+                    android:id="@+id/tv_power_max"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/max"
+                    android:textAlignment="center"
+                    android:textSize="12sp"
+                    />
+
+                <TextView
+                    android:id="@+id/power_max"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/power"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="0dp"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/primary_text_light"
+                    android:textSize="20sp"
+                    />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+            <ImageView
+                android:id="@+id/ic_time"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".25"
                 android:contentDescription="@string/power"
-                android:paddingStart="5dp"
-                android:paddingEnd="0dp"
-                android:textColor="@android:color/primary_text_light"
-                android:textSize="30sp"
+                app:srcCompat="@mipmap/ic_time_black"
                 />
 
             <TextView
-                android:id="@+id/tv_power_max"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight=".1"
-                android:text="@string/max"
-                />
-
-            <TextView
-                android:id="@+id/power_max"
+                android:id="@+id/time"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight=".2"
+                android:layout_weight=".75"
                 android:contentDescription="@string/power"
                 android:paddingStart="5dp"
                 android:paddingEnd="0dp"
@@ -295,7 +382,14 @@
                 android:id="@+id/clearStats"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/clear"
+                android:text="@string/clear_stats"
+                />
+
+            <Button
+                android:id="@+id/clearTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/clear_time"
                 />
 
             <Button

@@ -2,14 +2,16 @@
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="300dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="400dp"
     android:layout_height="300dp"
+    android:background="@android:color/background_dark"
     >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/background_dark"
+        android:background="@android:color/background_light"
         android:orientation="horizontal"
         android:padding="3dp"
         >
@@ -18,7 +20,6 @@
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@android:color/background_light"
             android:orientation="vertical"
             >
 
@@ -54,21 +55,75 @@
                     android:id="@+id/ic_cadence_float"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight=".2"
+                    android:layout_weight=".25"
                     android:contentDescription="@string/cadence"
                     android:src="@mipmap/ic_cadence_black"
                     />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".2"
+                    android:orientation="vertical"
+                    >
+
+                    <TextView
+                        android:id="@+id/title_avg_cadence_float"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/avg"
+                        android:textAlignment="center"
+                        android:textColor="@android:color/primary_text_light"
+                        android:textSize="12sp"
+                        />
+
+                    <TextView
+                        android:id="@+id/avg_cadence_float"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="center"
+                        android:textColor="@android:color/primary_text_light"
+                        android:textSize="20sp"
+                        />
+
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/cadence_float"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight=".8"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="0dp"
+                    android:layout_weight=".35"
+                    android:textAlignment="center"
                     android:textColor="@android:color/primary_text_light"
                     android:textSize="30sp"
                     />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".2"
+                    android:orientation="vertical"
+                    >
+
+                    <TextView
+                        android:id="@+id/title_max_cadence_float"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/max"
+                        android:textAlignment="center"
+                        android:textColor="@android:color/primary_text_light"
+                        android:textSize="12sp"
+                        />
+
+                    <TextView
+                        android:id="@+id/max_cadence_float"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="center"
+                        android:textColor="@android:color/primary_text_light"
+                        android:textSize="20sp"
+                        />
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -83,21 +138,76 @@
                     android:id="@+id/ic_resistance_float"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight=".2"
+                    android:layout_weight=".25"
                     android:contentDescription="@string/resistance"
                     android:src="@mipmap/ic_resistance_black"
                     />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".2"
+                    android:orientation="vertical"
+                    >
+
+                    <TextView
+                        android:id="@+id/title_avg_resistance_float"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/avg"
+                        android:textAlignment="center"
+                        android:textColor="@android:color/primary_text_light"
+                        android:textSize="12sp"
+                        />
+
+                    <TextView
+                        android:id="@+id/avg_resistance_float"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="center"
+                        android:textColor="@android:color/primary_text_light"
+                        android:textSize="20sp"
+                        />
+
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/resistance_float"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight=".8"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="0dp"
+                    android:layout_weight=".35"
+                    android:textAlignment="center"
                     android:textColor="@android:color/primary_text_light"
                     android:textSize="30sp"
                     />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".2"
+                    android:orientation="vertical"
+                    >
+
+                    <TextView
+                        android:id="@+id/title_max_resistance_float"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/max"
+                        android:textAlignment="center"
+                        android:textColor="@android:color/primary_text_light"
+                        android:textSize="12sp"
+                        />
+
+                    <TextView
+                        android:id="@+id/max_resistance_float"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="center"
+                        android:textColor="@android:color/primary_text_light"
+                        android:textSize="20sp"
+                        />
+
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -112,23 +222,106 @@
                     android:id="@+id/ic_power_float"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight=".2"
+                    android:layout_weight=".25"
                     android:contentDescription="@string/power"
                     android:src="@mipmap/ic_power_black"
                     />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".2"
+                    android:orientation="vertical"
+                    >
+
+                    <TextView
+                        android:id="@+id/title_avg_power_float"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/avg"
+                        android:textAlignment="center"
+                        android:textColor="@android:color/primary_text_light"
+                        android:textSize="12sp"
+                        />
+
+                    <TextView
+                        android:id="@+id/avg_power_float"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="center"
+                        android:textColor="@android:color/primary_text_light"
+                        android:textSize="20sp"
+                        />
+
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/power_float"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight=".8"
+                    android:layout_weight=".35"
                     android:contentDescription="@string/power"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="0dp"
+                    android:textAlignment="center"
                     android:textColor="@android:color/primary_text_light"
                     android:textSize="30sp"
                     />
 
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".2"
+                    android:orientation="vertical"
+                    >
+
+                    <TextView
+                        android:id="@+id/title_max_power_float"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/max"
+                        android:textAlignment="center"
+                        android:textColor="@android:color/primary_text_light"
+                        android:textSize="12sp"
+                        />
+
+                    <TextView
+                        android:id="@+id/max_power_float"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="center"
+                        android:textColor="@android:color/primary_text_light"
+                        android:textSize="20sp"
+                        />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="3dp"
+                >
+
+                <ImageView
+                    android:id="@+id/ic_time_float"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".25"
+                    android:contentDescription="@string/time"
+                    android:src="@mipmap/ic_time_black"
+                    />
+
+                <TextView
+                    android:id="@+id/time_float"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".75"
+                    android:contentDescription="@string/power"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/primary_text_light"
+                    android:textSize="30sp"
+                    />
             </LinearLayout>
 
         </LinearLayout>

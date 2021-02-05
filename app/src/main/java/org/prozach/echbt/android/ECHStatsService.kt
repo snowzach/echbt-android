@@ -43,6 +43,8 @@ class ECHStatsService : Service() {
     private var cadenceMax: UInt = 0u
     private var cadenceTotal: UInt = 0u
     private var powerMax: UInt = 0u
+    private var startTimeMillis: Long = 0;
+    private var elapsedTimeMillis: Long = 0;
     private var statCount: UInt = 0u
     private var statsFormat: StatsFormat = StatsFormat.PELOTON;
 
@@ -56,12 +58,24 @@ class ECHStatsService : Service() {
     }
 
     fun clearStats() {
-        resistanceMax = 0.toUInt()
-        resistanceTotal = 0.toUInt()
-        cadenceMax = 0.toUInt()
-        cadenceTotal = 0.toUInt()
-        powerMax = 0.toUInt()
-        statCount = 0.toUInt()
+        resistanceMax = 0U;
+        resistanceTotal = 0U;
+        cadenceMax = 0U;
+        cadenceTotal = 0U;
+        powerMax = 0U;
+        statCount = 0U;
+    }
+
+    fun clearTime() {
+        startTimeMillis = 0L;
+        elapsedTimeMillis = 0L;
+    }
+
+    fun floatingWindow(action: String) {
+        var intent = Intent("com.prozach.echbt.android.stats");
+        intent.putExtra("floating_ech_stats", action);
+        println("Sent:"+action);
+        sendBroadcast(intent);
     }
 
     // Helpers to start/stop
@@ -174,11 +188,16 @@ class ECHStatsService : Service() {
             onCharacteristicChanged = { _, characteristic ->
                 when (characteristic.value[1].toByte()) {
                     0xD1.toByte() -> {
-                        cadenceVal =
+                        var cadenceTemp =
                             characteristic.value[9].toUInt()
                                 .shl(8) + characteristic.value[10].toUInt()
                         log("Cadence ${cadenceVal}")
-                        sendLocalBroadcast()
+
+                        // Validate the value before using it
+                        if(cadenceTemp < 300U) {
+                            cadenceVal = cadenceTemp
+                            sendLocalBroadcast()
+                        }
                     }
                     0xD2.toByte() -> {
                         resistanceVal = characteristic.value[3].toUInt()
@@ -193,6 +212,17 @@ class ECHStatsService : Service() {
                     statCount++
                     cadenceTotal += cadenceVal
                     resistanceTotal += resistanceVal
+
+                    // We just started pedaling
+                    if(startTimeMillis == 0L) {
+                        startTimeMillis = System.currentTimeMillis();
+                    }
+                } else {
+                    // We stopped pedaling, stop the clock
+                    if(startTimeMillis > 0) {
+                        elapsedTimeMillis = System.currentTimeMillis() - startTimeMillis;
+                        startTimeMillis = 0;
+                    }
                 }
             }
 
@@ -250,6 +280,15 @@ class ECHStatsService : Service() {
             intent.putExtra("resistance_avg", calcResistance(resistanceVal).toString());
         }
         intent.putExtra("resistance_max", calcResistance(resistanceMax).toString());
+
+
+        var currentElapsedTimeMillis = elapsedTimeMillis;
+        if(startTimeMillis > 0) {
+            currentElapsedTimeMillis += System.currentTimeMillis() - startTimeMillis;
+        }
+        val minutes = currentElapsedTimeMillis / 1000 / 60
+        val seconds = currentElapsedTimeMillis / 1000 % 60
+        intent.putExtra("time", minutes.toString()+":"+seconds.toString().padStart(2, '0'));
 
         // Power
         var power = calcPower(cadenceVal, resistanceVal)

@@ -9,10 +9,17 @@ import android.graphics.PixelFormat
 import android.os.Build
 import android.view.*
 import androidx.core.content.ContextCompat.startActivity
+import kotlinx.android.synthetic.main.floating_ech_stats.view.avg_cadence_float
+import kotlinx.android.synthetic.main.floating_ech_stats.view.avg_power_float
+import kotlinx.android.synthetic.main.floating_ech_stats.view.avg_resistance_float
 import kotlin.math.abs
 import kotlinx.android.synthetic.main.floating_ech_stats.view.resistance_float
 import kotlinx.android.synthetic.main.floating_ech_stats.view.power_float
 import kotlinx.android.synthetic.main.floating_ech_stats.view.cadence_float
+import kotlinx.android.synthetic.main.floating_ech_stats.view.max_cadence_float
+import kotlinx.android.synthetic.main.floating_ech_stats.view.max_power_float
+import kotlinx.android.synthetic.main.floating_ech_stats.view.max_resistance_float
+import kotlinx.android.synthetic.main.floating_ech_stats.view.time_float
 import kotlinx.android.synthetic.main.floating_ech_stats.view.title_float
 
 class ECHStatsFloating constructor(private val context: Context) {
@@ -127,10 +134,23 @@ class ECHStatsFloating constructor(private val context: Context) {
     private val broadcastHandler: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             println("onReceive")
+            var floating_ech_stats = intent.getStringExtra("floating_ech_stats")
+            println("Got:"+floating_ech_stats);
+            if(floating_ech_stats == "dismiss") {
+                dismiss();
+                return;
+            }
             with(floatView) {
                 cadence_float.text = intent.getStringExtra("cadence")
+                avg_cadence_float.text = intent.getStringExtra("cadence_avg")
+                max_cadence_float.text = intent.getStringExtra("cadence_max")
                 resistance_float.text = intent.getStringExtra("resistance")
+                avg_resistance_float.text = intent.getStringExtra("resistance_avg")
+                max_resistance_float.text = intent.getStringExtra("resistance_max")
                 power_float.text = intent.getStringExtra("power")
+                avg_power_float.text = intent.getStringExtra("power_avg")
+                max_power_float.text = intent.getStringExtra("power_max")
+                time_float.text = intent.getStringExtra("time")
             }
         }
     }

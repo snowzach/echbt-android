@@ -1,11 +1,13 @@
 <resources>
     <string name="app_name">EchBT Stats</string>
     <string name="echbt_dash">EchBT Bike Stats</string>
-    <string name="stats_header">EchBT Stats</string>
+    <string name="stats_header">  EchBT Bike Stats  </string>
     <string name="resistance">Resistance</string>
     <string name="power">Power</string>
+    <string name="time">Time</string>
     <string name="cadence">Cadence</string>
-    <string name="clear">Clear Stats</string>
+    <string name="clear_stats">Clear Stats</string>
+    <string name="clear_time">Clear Time</string>
     <string name="pip">Open Stats Floating Window</string>
     <string name="exit">Exit</string>
     <string name="pip_help">In order to show the stats popup you will need to enable the Display Over Other Apps permission. When you select Open Stats Floating Window it will open the permissions page. Select EchBT Stats app and enable the permission to draw over other apps. Then press back to return to this app. You will only need to do this the first time.</string>

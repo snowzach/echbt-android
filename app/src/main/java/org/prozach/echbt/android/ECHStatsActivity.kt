@@ -20,6 +20,7 @@ import kotlinx.android.synthetic.main.activity_ech_stats.cadence
 import kotlinx.android.synthetic.main.activity_ech_stats.cadence_avg
 import kotlinx.android.synthetic.main.activity_ech_stats.cadence_max
 import kotlinx.android.synthetic.main.activity_ech_stats.clearStats
+import kotlinx.android.synthetic.main.activity_ech_stats.clearTime
 import kotlinx.android.synthetic.main.activity_ech_stats.resistance
 import kotlinx.android.synthetic.main.activity_ech_stats.resistance_avg
 import kotlinx.android.synthetic.main.activity_ech_stats.resistance_max
@@ -31,6 +32,7 @@ import kotlinx.android.synthetic.main.activity_ech_stats.exitButton
 import kotlinx.android.synthetic.main.activity_ech_stats.pip_help
 import kotlinx.android.synthetic.main.activity_ech_stats.stats_format_echelon
 import kotlinx.android.synthetic.main.activity_ech_stats.stats_format_peleton
+import kotlinx.android.synthetic.main.activity_ech_stats.time
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -55,6 +57,7 @@ class ECHStatsActivity : AppCompatActivity() {
             println("Activity Connected")
             val binder = service as ECHStatsService.ECHStatsBinder
             statsService = binder.getService()
+            statsService?.floatingWindow("dismiss");
             isBound = true
         }
 
@@ -107,12 +110,17 @@ class ECHStatsActivity : AppCompatActivity() {
             statsService?.clearStats()
         }
 
+        clearTime.setOnClickListener{
+            statsService?.clearTime()
+        }
+
         stats_format_echelon.setOnClickListener{
             statsService?.setStatsFormat(ECHStatsService.StatsFormat.ECHELON)
         }
         stats_format_peleton.setOnClickListener{
             statsService?.setStatsFormat(ECHStatsService.StatsFormat.PELOTON)
         }
+
     }
 
 
@@ -130,6 +138,7 @@ class ECHStatsActivity : AppCompatActivity() {
                 power.text = intent.getStringExtra("power")
                 power_avg.text = intent.getStringExtra("power_avg")
                 power_max.text = intent.getStringExtra("power_max")
+                time.text = intent.getStringExtra("time")
             }
         }
     }
@@ -159,6 +168,7 @@ class ECHStatsActivity : AppCompatActivity() {
             registerReceiver(broadcastHandler, filter)
             receiverRegistered = true
         }
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -166,8 +176,8 @@ class ECHStatsActivity : AppCompatActivity() {
         when (requestCode) {
             REQUEST_CODE_DRAW_OVERLAY_PERMISSION -> {
                 if (canDrawOverlays) {
-                    ECHStatsFloating.show()
-                    floatingWindowShown = true
+                    ECHStatsFloating.show();
+                    floatingWindowShown = true;
                     finish()
                     // Return to home screen
                     val startMain = Intent(Intent.ACTION_MAIN)
