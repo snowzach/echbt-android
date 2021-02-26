@@ -1,13 +1,17 @@
 package org.prozach.echbt.android
 
 import android.content.BroadcastReceiver
+import android.content.ComponentName
 import android.content.Context
 import android.content.Context.WINDOW_SERVICE
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.ServiceConnection
 import android.graphics.PixelFormat
 import android.os.Build
+import android.os.IBinder
 import android.view.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat.startActivity
 import kotlinx.android.synthetic.main.floating_ech_stats.view.avg_cadence_float
 import kotlinx.android.synthetic.main.floating_ech_stats.view.avg_power_float
@@ -16,6 +20,10 @@ import kotlin.math.abs
 import kotlinx.android.synthetic.main.floating_ech_stats.view.resistance_float
 import kotlinx.android.synthetic.main.floating_ech_stats.view.power_float
 import kotlinx.android.synthetic.main.floating_ech_stats.view.cadence_float
+import kotlinx.android.synthetic.main.floating_ech_stats.view.ic_back_float
+import kotlinx.android.synthetic.main.floating_ech_stats.view.ic_reset_stats
+import kotlinx.android.synthetic.main.floating_ech_stats.view.ic_reset_time
+import kotlinx.android.synthetic.main.floating_ech_stats.view.kcal_float
 import kotlinx.android.synthetic.main.floating_ech_stats.view.max_cadence_float
 import kotlinx.android.synthetic.main.floating_ech_stats.view.max_power_float
 import kotlinx.android.synthetic.main.floating_ech_stats.view.max_resistance_float
@@ -34,6 +42,19 @@ class ECHStatsFloating constructor(private val context: Context) {
         LayoutInflater.from(context).inflate(R.layout.floating_ech_stats, null)
 
     private lateinit var layoutParams: WindowManager.LayoutParams
+
+    var statsService: ECHStatsService? = null
+    private val ECHStatsServiceConnection = object : ServiceConnection {
+        override fun onServiceConnected(className: ComponentName, service: IBinder) {
+            println("Floating Window Connected To Service")
+            val binder = service as ECHStatsService.ECHStatsBinder
+            statsService = binder.getService()
+        }
+
+        override fun onServiceDisconnected(name: ComponentName) {
+            println("Floating Window Disconnected From Service")
+        }
+    }
 
     private var lastX: Int = 0
     private var lastY: Int = 0
@@ -85,11 +106,19 @@ class ECHStatsFloating constructor(private val context: Context) {
 
     init {
         with(floatView) {
-            title_float.setOnClickListener {
+            ic_back_float.setOnClickListener {
                 val intent = Intent(context, ECHStatsActivity::class.java)
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(context, intent, null)
                 dismiss()
+            }
+
+            ic_reset_stats.setOnClickListener {
+                statsService?.clearStats()
+            }
+
+            ic_reset_time.setOnClickListener {
+                statsService?.clearTime()
             }
         }
 
@@ -121,6 +150,8 @@ class ECHStatsFloating constructor(private val context: Context) {
             filter.addAction("com.prozach.echbt.android.stats")
             context.registerReceiver(broadcastHandler, filter)
         }
+        val intent = Intent(context, ECHStatsService::class.java)
+        context.bindService(intent, ECHStatsServiceConnection, AppCompatActivity.BIND_AUTO_CREATE)
     }
 
     fun dismiss() {
@@ -151,6 +182,7 @@ class ECHStatsFloating constructor(private val context: Context) {
                 avg_power_float.text = intent.getStringExtra("power_avg")
                 max_power_float.text = intent.getStringExtra("power_max")
                 time_float.text = intent.getStringExtra("time")
+                kcal_float.text = intent.getStringExtra("kcal")
             }
         }
     }

@@ -7,6 +7,7 @@ import android.bluetooth.BluetoothGattDescriptor
 
 class ConnectionEventListener {
     var onConnectionSetupComplete: ((BluetoothGatt) -> Unit)? = null
+    var onConnectionFailed: ((BluetoothGatt) -> Unit)? = null
     var onDisconnect: ((BluetoothDevice) -> Unit)? = null
     var onDescriptorRead: ((BluetoothDevice, BluetoothGattDescriptor) -> Unit)? = null
     var onDescriptorWrite: ((BluetoothDevice, BluetoothGattDescriptor) -> Unit)? = null

@@ -12,6 +12,7 @@ import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
+import org.jetbrains.anko.notificationManager
 import org.prozach.echbt.android.ble.ConnectionEventListener
 import org.prozach.echbt.android.ble.ConnectionManager
 import org.prozach.echbt.android.ble.toHexString
@@ -54,7 +55,7 @@ class ECHStatsService : Service() {
 
     fun setStatsFormat(sf: StatsFormat) {
         statsFormat = sf
-        powerMax = 0.toUInt()
+        powerMax = 0U;
     }
 
     fun clearStats() {
@@ -69,6 +70,13 @@ class ECHStatsService : Service() {
     fun clearTime() {
         startTimeMillis = 0L;
         elapsedTimeMillis = 0L;
+    }
+
+    fun shutdown() {
+        ConnectionManager.unregisterListener(connectionEventListener)
+        ConnectionManager.teardownConnection(device)
+        stopForeground(true)
+        stopSelf()
     }
 
     fun floatingWindow(action: String) {
@@ -107,8 +115,6 @@ class ECHStatsService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId);
         println("onStartCommand")
-
-        connectionEventListener
 
         // Create a notification to keep it running
         createNotificationChannel()
@@ -296,12 +302,15 @@ class ECHStatsService : Service() {
             powerMax = power
         }
         intent.putExtra("power", power.toString());
+
+        var avgPower = 0U;
         if(statCount > 0.toUInt()) {
-            intent.putExtra("power_avg", calcPower(cadenceTotal / statCount, resistanceTotal / statCount).toString());
-        } else {
-            intent.putExtra("power_avg", 0.toString());
+            avgPower = calcPower(cadenceTotal / statCount, resistanceTotal / statCount);
         }
+        intent.putExtra("power_avg", avgPower.toString());
         intent.putExtra("power_max", powerMax.toString());
+        var kcal = ((avgPower.toFloat() / 0.24) * (currentElapsedTimeMillis.toFloat()/1000.0))/1000.0;
+        intent.putExtra("kcal", kcal.toUInt().toString());
 
         sendBroadcast(intent)
         println("sendLocalBroadcast")

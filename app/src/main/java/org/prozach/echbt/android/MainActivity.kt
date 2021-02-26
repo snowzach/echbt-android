@@ -232,7 +232,14 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             onDisconnect = {
-                showToast("Disconnected from device")
+                runOnUiThread {
+                    showToast("Disconnected from device")
+                }
+            }
+            onConnectionFailed = { gatt ->
+                runOnUiThread {
+                    showToast("Connection failed. Try Again. It may take several tries.")
+                }
             }
         }
     }

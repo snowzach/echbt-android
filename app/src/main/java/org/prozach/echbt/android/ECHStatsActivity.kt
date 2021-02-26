@@ -19,8 +19,8 @@ import kotlinx.android.synthetic.main.activity_ech_stats.log_text_view
 import kotlinx.android.synthetic.main.activity_ech_stats.cadence
 import kotlinx.android.synthetic.main.activity_ech_stats.cadence_avg
 import kotlinx.android.synthetic.main.activity_ech_stats.cadence_max
-import kotlinx.android.synthetic.main.activity_ech_stats.clearStats
-import kotlinx.android.synthetic.main.activity_ech_stats.clearTime
+import kotlinx.android.synthetic.main.activity_ech_stats.ic_reset_stats
+import kotlinx.android.synthetic.main.activity_ech_stats.ic_reset_time
 import kotlinx.android.synthetic.main.activity_ech_stats.resistance
 import kotlinx.android.synthetic.main.activity_ech_stats.resistance_avg
 import kotlinx.android.synthetic.main.activity_ech_stats.resistance_max
@@ -28,8 +28,10 @@ import kotlinx.android.synthetic.main.activity_ech_stats.power
 import kotlinx.android.synthetic.main.activity_ech_stats.power_avg
 import kotlinx.android.synthetic.main.activity_ech_stats.power_max
 import kotlinx.android.synthetic.main.activity_ech_stats.pipButton
-import kotlinx.android.synthetic.main.activity_ech_stats.exitButton
+import kotlinx.android.synthetic.main.activity_ech_stats.kcal
 import kotlinx.android.synthetic.main.activity_ech_stats.pip_help
+import kotlinx.android.synthetic.main.activity_ech_stats.reset_stats
+import kotlinx.android.synthetic.main.activity_ech_stats.reset_time
 import kotlinx.android.synthetic.main.activity_ech_stats.stats_format_echelon
 import kotlinx.android.synthetic.main.activity_ech_stats.stats_format_peleton
 import kotlinx.android.synthetic.main.activity_ech_stats.time
@@ -68,9 +70,11 @@ class ECHStatsActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        println("ONCREATE")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ech_stats)
-        val intent = Intent(this, ECHStatsService::class.java)
+
+        var intent = Intent(this, ECHStatsService::class.java)
         bindService(intent, ECHStatsServiceConnection, BIND_AUTO_CREATE)
 
         val filter = IntentFilter()
@@ -101,29 +105,25 @@ class ECHStatsActivity : AppCompatActivity() {
             pip_help.visibility = View.VISIBLE
         }
 
-        exitButton.setOnClickListener {
-            super.onBackPressed();
-            stopService(Intent(this, ECHStatsService::class.java))
-        }
-
-        clearStats.setOnClickListener{
+        ic_reset_stats.setOnClickListener{
             statsService?.clearStats()
         }
-
-        clearTime.setOnClickListener{
+        reset_stats.setOnClickListener{
+            statsService?.clearStats()
+        }
+        ic_reset_time.setOnClickListener{
+            statsService?.clearStats()
+        }
+        reset_time.setOnClickListener{
             statsService?.clearTime()
         }
-
         stats_format_echelon.setOnClickListener{
             statsService?.setStatsFormat(ECHStatsService.StatsFormat.ECHELON)
         }
         stats_format_peleton.setOnClickListener{
             statsService?.setStatsFormat(ECHStatsService.StatsFormat.PELOTON)
         }
-
     }
-
-
 
     private val broadcastHandler: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
@@ -139,8 +139,14 @@ class ECHStatsActivity : AppCompatActivity() {
                 power_avg.text = intent.getStringExtra("power_avg")
                 power_max.text = intent.getStringExtra("power_max")
                 time.text = intent.getStringExtra("time")
+                kcal.text = intent.getStringExtra("kcal")
             }
         }
+    }
+
+    override fun onBackPressed() {
+        statsService?.shutdown()
+        super.onBackPressed() // Don't call this
     }
 
     override fun onDestroy() {

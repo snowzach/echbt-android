@@ -28,6 +28,7 @@
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:background="@android:color/background_dark"
         android:orientation="vertical"
         android:padding="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -51,18 +52,35 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:orientation="horizontal"
+            android:paddingBottom="4dp"
             >
-
-            <ImageView
-                android:id="@+id/ic_cadence"
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight=".25"
-                android:contentDescription="@string/cadence"
-                app:srcCompat="@mipmap/ic_cadence_black"
-                />
+                android:orientation="vertical"
+                >
+
+                <TextView
+                    android:id="@+id/cadence_icon"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/cadence"
+                    android:gravity="center"
+                    android:textColor="?android:attr/colorForegroundInverse"
+                    android:textSize="12sp"
+                    />
+
+                <ImageView
+                    android:id="@+id/ic_cadence"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/cadence"
+                    app:srcCompat="@mipmap/ic_cadence_red"
+                    />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -76,7 +94,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/avg"
-                    android:textAlignment="center"
+                    android:gravity="center"
+                    android:textColor="@color/design_default_color_on_primary"
                     android:textSize="12sp"
                     />
 
@@ -84,24 +103,26 @@
                     android:id="@+id/cadence_avg"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="center"
                     android:paddingStart="5dp"
                     android:paddingEnd="0dp"
-                    android:textAlignment="center"
-                    android:textColor="@android:color/primary_text_light"
-                    android:textSize="20sp"
+                    android:text="@string/zero"
+                    android:textColor="?android:attr/colorForegroundInverse"
+                    android:textSize="26sp"
                     />
             </LinearLayout>
 
             <TextView
                 android:id="@+id/cadence"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight=".25"
+                android:gravity="center"
                 android:paddingStart="5dp"
                 android:paddingEnd="0dp"
-                android:textAlignment="center"
-                android:textColor="@android:color/primary_text_light"
-                android:textSize="30sp"
+                android:text="@string/zero"
+                android:textColor="?android:attr/colorForegroundInverse"
+                android:textSize="44sp"
                 />
 
             <LinearLayout
@@ -116,7 +137,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/max"
-                    android:textAlignment="center"
+                    android:gravity="center"
+                    android:textColor="?android:attr/colorForegroundInverse"
                     android:textSize="12sp"
                     />
 
@@ -124,11 +146,12 @@
                     android:id="@+id/cadence_max"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="center"
                     android:paddingStart="5dp"
                     android:paddingEnd="0dp"
-                    android:textAlignment="center"
-                    android:textColor="@android:color/primary_text_light"
-                    android:textSize="20sp"
+                    android:text="@string/zero"
+                    android:textColor="?android:attr/colorForegroundInverse"
+                    android:textSize="26sp"
                     />
 
             </LinearLayout>
@@ -137,18 +160,37 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:orientation="horizontal"
+            android:paddingBottom="4dp"
             >
-
-            <ImageView
-                android:id="@+id/ic_resistance"
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight=".25"
-                android:contentDescription="@string/resistance"
-                app:srcCompat="@mipmap/ic_resistance_black"
-                />
+                android:orientation="vertical"
+                >
+
+                <TextView
+                    android:id="@+id/resistance_icon"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/resistance"
+                    android:gravity="center"
+                    android:textColor="?android:attr/colorForegroundInverse"
+                    android:textSize="12sp"
+                    />
+
+                <ImageView
+                    android:id="@+id/ic_resistance"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".25"
+                    android:contentDescription="@string/resistance"
+                    app:srcCompat="@mipmap/ic_resistance2"
+                    />
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -162,7 +204,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/avg"
-                    android:textAlignment="center"
+                    android:gravity="center"
+                    android:textColor="?android:attr/colorForegroundInverse"
                     android:textSize="12sp"
                     />
 
@@ -170,24 +213,26 @@
                     android:id="@+id/resistance_avg"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="center"
                     android:paddingStart="5dp"
                     android:paddingEnd="0dp"
-                    android:textAlignment="center"
-                    android:textColor="@android:color/primary_text_light"
-                    android:textSize="20sp"
+                    android:text="@string/zero"
+                    android:textColor="?android:attr/colorForegroundInverse"
+                    android:textSize="26sp"
                     />
             </LinearLayout>
 
             <TextView
                 android:id="@+id/resistance"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight=".25"
+                android:gravity="center"
                 android:paddingStart="5dp"
                 android:paddingEnd="0dp"
-                android:textAlignment="center"
-                android:textColor="@android:color/primary_text_light"
-                android:textSize="30sp"
+                android:text="@string/zero"
+                android:textColor="?android:attr/colorForegroundInverse"
+                android:textSize="44sp"
                 />
 
             <LinearLayout
@@ -202,7 +247,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/max"
-                    android:textAlignment="center"
+                    android:gravity="center"
+                    android:textColor="?android:attr/colorForegroundInverse"
                     android:textSize="12sp"
                     />
 
@@ -210,11 +256,12 @@
                     android:id="@+id/resistance_max"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="center"
                     android:paddingStart="5dp"
                     android:paddingEnd="0dp"
-                    android:textAlignment="center"
-                    android:textColor="@android:color/primary_text_light"
-                    android:textSize="20sp"
+                    android:text="@string/zero"
+                    android:textColor="?android:attr/colorForegroundInverse"
+                    android:textSize="24sp"
                     />
             </LinearLayout>
 
@@ -222,18 +269,37 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:orientation="horizontal"
+            android:paddingBottom="4dp"
             >
 
-            <ImageView
-                android:id="@+id/ic_power"
+             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight=".25"
-                android:contentDescription="@string/power"
-                app:srcCompat="@mipmap/ic_power_black"
-                />
+                android:orientation="vertical"
+                >
+
+                <TextView
+                    android:id="@+id/power_icon"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/power"
+                    android:gravity="center"
+                    android:textColor="?android:attr/colorForegroundInverse"
+                    android:textSize="12sp"
+                    />
+
+                 <ImageView
+                     android:id="@+id/ic_power"
+                     android:layout_width="match_parent"
+                     android:layout_height="match_parent"
+                     android:contentDescription="@string/power"
+                     app:srcCompat="@mipmap/ic_power2"
+                     />
+
+             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -247,7 +313,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/avg"
-                    android:textAlignment="center"
+                    android:gravity="center"
+                    android:textColor="?android:attr/colorForegroundInverse"
                     android:textSize="12sp"
                     />
 
@@ -256,25 +323,27 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/power"
+                    android:gravity="center"
                     android:paddingStart="5dp"
                     android:paddingEnd="0dp"
-                    android:textAlignment="center"
-                    android:textColor="@android:color/primary_text_light"
-                    android:textSize="20sp"
+                    android:text="@string/zero"
+                    android:textColor="?android:attr/colorForegroundInverse"
+                    android:textSize="26sp"
                     />
             </LinearLayout>
 
             <TextView
                 android:id="@+id/power"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight=".25"
                 android:contentDescription="@string/power"
+                android:gravity="center"
                 android:paddingStart="5dp"
                 android:paddingEnd="0dp"
-                android:textAlignment="center"
-                android:textColor="@android:color/primary_text_light"
-                android:textSize="30sp"
+                android:text="@string/zero"
+                android:textColor="?android:attr/colorForegroundInverse"
+                android:textSize="44sp"
                 />
 
             <LinearLayout
@@ -289,7 +358,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/max"
-                    android:textAlignment="center"
+                    android:gravity="center"
+                    android:textColor="?android:attr/colorForegroundInverse"
                     android:textSize="12sp"
                     />
 
@@ -298,13 +368,151 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/power"
+                    android:gravity="center"
                     android:paddingStart="5dp"
                     android:paddingEnd="0dp"
-                    android:textAlignment="center"
-                    android:textColor="@android:color/primary_text_light"
-                    android:textSize="20sp"
+                    android:text="@string/zero"
+                    android:textColor="?android:attr/colorForegroundInverse"
+                    android:textSize="26sp"
                     />
             </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:orientation="horizontal"
+            android:paddingBottom="4dp"
+            >
+
+              <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".25"
+                android:orientation="vertical"
+                >
+
+                <TextView
+                    android:id="@+id/time_icon"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/time"
+                    android:gravity="center"
+                    android:textColor="?android:attr/colorForegroundInverse"
+                    android:textSize="12sp"
+                    />
+
+                <ImageView
+                    android:id="@+id/ic_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/power"
+                    app:srcCompat="@mipmap/ic_time_white"
+                    />
+
+              </LinearLayout>
+
+            <TextView
+                android:id="@+id/time"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".25"
+                android:contentDescription="@string/power"
+                android:paddingStart="5dp"
+                android:paddingEnd="0dp"
+                android:text="@string/zero"
+                android:textColor="?android:attr/colorForegroundInverse"
+                android:textSize="44sp"
+                />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".25"
+                android:orientation="vertical"
+                >
+
+                <TextView
+                    android:id="@+id/kcal_icon"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/kcal"
+                    android:gravity="center"
+                    android:textColor="?android:attr/colorForegroundInverse"
+                    android:textSize="12sp"
+                    />
+
+                <ImageView
+                    android:id="@+id/ic_kcal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:srcCompat="@mipmap/ic_kcal"
+                    />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/kcal"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".25"
+                android:contentDescription="@string/kcal"
+                android:paddingStart="5dp"
+                android:paddingEnd="0dp"
+                android:text="@string/zero"
+                android:textColor="?android:attr/colorForegroundInverse"
+                android:textSize="44sp"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:orientation="horizontal"
+            android:paddingBottom="4dp"
+            >
+
+            <TextView
+                android:id="@+id/reset_time"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".3"
+                android:gravity="right|center_vertical|end"
+                android:text="@string/reset_time"
+                android:textColor="?android:attr/colorForegroundInverse"
+                android:textSize="22sp"
+                />
+
+            <ImageView
+                android:id="@+id/ic_reset_time"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".2"
+                android:contentDescription="@string/power"
+                app:srcCompat="@mipmap/ic_reset_time"
+                />
+
+            <ImageView
+                android:id="@+id/ic_reset_stats"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".2"
+                android:contentDescription="@string/power"
+                app:srcCompat="@mipmap/ic_reset_stats"
+                />
+
+            <TextView
+                android:id="@+id/reset_stats"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".3"
+                android:gravity="start|center_vertical"
+                android:text="@string/reset_stats"
+                android:textColor="?android:attr/colorForegroundInverse"
+                android:textSize="22sp"
+                />
 
         </LinearLayout>
 
@@ -314,25 +522,46 @@
             android:orientation="horizontal"
             >
 
-            <ImageView
-                android:id="@+id/ic_time"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight=".25"
-                android:contentDescription="@string/power"
-                app:srcCompat="@mipmap/ic_time_black"
-                />
-
-            <TextView
-                android:id="@+id/time"
+            <RadioGroup
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="0.25"
+                >
+
+                <TextView
+                    android:id="@+id/stats_format"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/stats_format"
+                    android:textColor="?android:attr/colorForegroundInverse"
+                    />
+
+                <RadioButton
+                    android:id="@+id/stats_format_echelon"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="@color/colorAccent"
+                    android:text="@string/echelon"
+                    android:textColor="?android:attr/colorForegroundInverse"
+                    />
+
+                <RadioButton
+                    android:id="@+id/stats_format_peleton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="@color/colorAccent"
+                    android:checked="true"
+                    android:text="@string/peloton"
+                    android:textColor="?android:attr/colorForegroundInverse"
+                    />
+            </RadioGroup>
+
+            <Button
+                android:id="@+id/pipButton"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:layout_weight=".75"
-                android:contentDescription="@string/power"
-                android:paddingStart="5dp"
-                android:paddingEnd="0dp"
-                android:textColor="@android:color/primary_text_light"
-                android:textSize="30sp"
+                android:text="@string/pip"
                 />
 
         </LinearLayout>
@@ -341,63 +570,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:paddingBottom="4dp"
             >
 
-            <RadioGroup
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                >
 
-                <TextView
-                    android:id="@+id/stats_format"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/stats_format"
-                    />
-
-                <RadioButton
-                    android:id="@+id/stats_format_echelon"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/echelon"
-                    />
-
-                <RadioButton
-                    android:id="@+id/stats_format_peleton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:checked="true"
-                    android:text="@string/peloton"
-                    />
-            </RadioGroup>
-
-            <Button
-                android:id="@+id/pipButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/pip"
-                />
-
-            <Button
-                android:id="@+id/clearStats"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/clear_stats"
-                />
-
-            <Button
-                android:id="@+id/clearTime"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/clear_time"
-                />
-
-            <Button
-                android:id="@+id/exitButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/exit"
-                />
 
             <TextView
                 android:id="@+id/pip_help"

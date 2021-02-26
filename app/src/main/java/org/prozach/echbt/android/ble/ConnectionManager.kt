@@ -341,6 +341,7 @@ object ConnectionManager {
                 Timber.e("onConnectionStateChange: status $status encountered for $deviceAddress!")
                 if (pendingOperation is Connect) {
                     signalEndOfOperation()
+                    listeners.forEach { it.get()?.onConnectionFailed?.invoke(gatt) }
                 }
                 teardownConnection(gatt.device)
             }
