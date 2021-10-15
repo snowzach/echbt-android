@@ -21,6 +21,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:keepScreenOn="true"
     tools:context=".BleOperationsActivity"
     >
 
@@ -56,6 +57,7 @@
             android:orientation="horizontal"
             android:paddingBottom="4dp"
             >
+
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -67,8 +69,8 @@
                     android:id="@+id/cadence_icon"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/cadence"
                     android:gravity="center"
+                    android:text="@string/cadence"
                     android:textColor="?android:attr/colorForegroundInverse"
                     android:textSize="12sp"
                     />
@@ -93,8 +95,8 @@
                     android:id="@+id/tv_cadence_avg"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/avg"
                     android:gravity="center"
+                    android:text="@string/avg"
                     android:textColor="@color/design_default_color_on_primary"
                     android:textSize="12sp"
                     />
@@ -136,8 +138,8 @@
                     android:id="@+id/tv_cadence_max"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/max"
                     android:gravity="center"
+                    android:text="@string/max"
                     android:textColor="?android:attr/colorForegroundInverse"
                     android:textSize="12sp"
                     />
@@ -164,6 +166,7 @@
             android:orientation="horizontal"
             android:paddingBottom="4dp"
             >
+
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -175,8 +178,8 @@
                     android:id="@+id/resistance_icon"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/resistance"
                     android:gravity="center"
+                    android:text="@string/resistance"
                     android:textColor="?android:attr/colorForegroundInverse"
                     android:textSize="12sp"
                     />
@@ -203,8 +206,8 @@
                     android:id="@+id/tv_resistance_avg"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/avg"
                     android:gravity="center"
+                    android:text="@string/avg"
                     android:textColor="?android:attr/colorForegroundInverse"
                     android:textSize="12sp"
                     />
@@ -246,8 +249,8 @@
                     android:id="@+id/tv_resistance_max"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/max"
                     android:gravity="center"
+                    android:text="@string/max"
                     android:textColor="?android:attr/colorForegroundInverse"
                     android:textSize="12sp"
                     />
@@ -274,7 +277,7 @@
             android:paddingBottom="4dp"
             >
 
-             <LinearLayout
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight=".25"
@@ -285,21 +288,21 @@
                     android:id="@+id/power_icon"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/power"
                     android:gravity="center"
+                    android:text="@string/power"
                     android:textColor="?android:attr/colorForegroundInverse"
                     android:textSize="12sp"
                     />
 
-                 <ImageView
-                     android:id="@+id/ic_power"
-                     android:layout_width="match_parent"
-                     android:layout_height="match_parent"
-                     android:contentDescription="@string/power"
-                     app:srcCompat="@mipmap/ic_power2"
-                     />
+                <ImageView
+                    android:id="@+id/ic_power"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/power"
+                    app:srcCompat="@mipmap/ic_power2"
+                    />
 
-             </LinearLayout>
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -312,8 +315,8 @@
                     android:id="@+id/tv_power_avg"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/avg"
                     android:gravity="center"
+                    android:text="@string/avg"
                     android:textColor="?android:attr/colorForegroundInverse"
                     android:textSize="12sp"
                     />
@@ -357,8 +360,8 @@
                     android:id="@+id/tv_power_max"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/max"
                     android:gravity="center"
+                    android:text="@string/max"
                     android:textColor="?android:attr/colorForegroundInverse"
                     android:textSize="12sp"
                     />
@@ -386,7 +389,7 @@
             android:paddingBottom="4dp"
             >
 
-              <LinearLayout
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight=".25"
@@ -397,8 +400,8 @@
                     android:id="@+id/time_icon"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/time"
                     android:gravity="center"
+                    android:text="@string/time"
                     android:textColor="?android:attr/colorForegroundInverse"
                     android:textSize="12sp"
                     />
@@ -411,7 +414,7 @@
                     app:srcCompat="@mipmap/ic_time_white"
                     />
 
-              </LinearLayout>
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/time"
@@ -437,8 +440,8 @@
                     android:id="@+id/kcal_icon"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/kcal"
                     android:gravity="center"
+                    android:text="@string/kcal"
                     android:textColor="?android:attr/colorForegroundInverse"
                     android:textSize="12sp"
                     />
@@ -572,8 +575,6 @@
             android:orientation="vertical"
             android:paddingBottom="4dp"
             >
-
-
 
             <TextView
                 android:id="@+id/pip_help"
