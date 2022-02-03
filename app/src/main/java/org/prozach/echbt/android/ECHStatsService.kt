@@ -12,6 +12,8 @@ import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
+import kotlinx.android.synthetic.main.activity_ech_stats.stats_format_echelon
+import kotlinx.android.synthetic.main.activity_ech_stats.stats_format_peleton
 import org.jetbrains.anko.notificationManager
 import org.prozach.echbt.android.ble.ConnectionEventListener
 import org.prozach.echbt.android.ble.ConnectionManager
@@ -54,6 +56,7 @@ class ECHStatsService : Service() {
     }
 
     fun setStatsFormat(sf: StatsFormat) {
+        var intent = Intent("com.prozach.echbt.android.stats");
         statsFormat = sf
         powerMax = 0U;
     }
@@ -311,6 +314,12 @@ class ECHStatsService : Service() {
         intent.putExtra("power_max", powerMax.toString());
         var kcal = ((avgPower.toFloat() / 0.24) * (currentElapsedTimeMillis.toFloat()/1000.0))/1000.0;
         intent.putExtra("kcal", kcal.toUInt().toString());
+
+        if(statsFormat == StatsFormat.ECHELON) {
+            intent.putExtra("stats_format", "echelon");
+        } else if(statsFormat == StatsFormat.PELOTON) {
+            intent.putExtra("stats_format", "peloton");
+        }
 
         sendBroadcast(intent)
         println("sendLocalBroadcast")

@@ -32,6 +32,7 @@ import kotlinx.android.synthetic.main.activity_ech_stats.kcal
 import kotlinx.android.synthetic.main.activity_ech_stats.pip_help
 import kotlinx.android.synthetic.main.activity_ech_stats.reset_stats
 import kotlinx.android.synthetic.main.activity_ech_stats.reset_time
+import kotlinx.android.synthetic.main.activity_ech_stats.stats_format
 import kotlinx.android.synthetic.main.activity_ech_stats.stats_format_echelon
 import kotlinx.android.synthetic.main.activity_ech_stats.stats_format_peleton
 import kotlinx.android.synthetic.main.activity_ech_stats.time
@@ -140,6 +141,18 @@ class ECHStatsActivity : AppCompatActivity() {
                 power_max.text = intent.getStringExtra("power_max")
                 time.text = intent.getStringExtra("time")
                 kcal.text = intent.getStringExtra("kcal")
+
+                var statsFormat = intent.getStringExtra("stats_format")
+                if(statsFormat != "") {
+                    if(statsFormat == "echelon" && !stats_format_echelon.isChecked) {
+                        stats_format_echelon.isChecked = true
+                        stats_format_peleton.isChecked = false
+                    }
+                    if(statsFormat == "peloton" && !stats_format_peleton.isChecked) {
+                        stats_format_echelon.isChecked = false
+                        stats_format_peleton.isChecked = true
+                    }
+                }
             }
         }
     }

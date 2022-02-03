@@ -24,9 +24,9 @@ android {
     defaultConfig {
         applicationId "org.prozach.echbt.android"
         minSdkVersion 21
-        targetSdkVersion 29
-        versionCode 9
-        versionName "1.6"
+        targetSdkVersion 30
+        versionCode 10
+        versionName "1.7"
         vectorDrawables {
             useSupportLibrary true
         }
