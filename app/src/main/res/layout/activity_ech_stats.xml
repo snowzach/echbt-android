@@ -470,6 +470,58 @@
 
         </LinearLayout>
 
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:orientation="horizontal"
+            android:paddingBottom="4dp"
+            >
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".25"
+                android:orientation="vertical"
+                >
+
+                <TextView
+                    android:id="@+id/dist_icon"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/dist"
+                    android:textColor="?android:attr/colorForegroundInverse"
+                    android:textSize="12sp"
+                    />
+
+                <ImageView
+                    android:id="@+id/ic_dist"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/power"
+                    app:srcCompat="@mipmap/ic_dist"
+                    />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/dist"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".25"
+                android:contentDescription="@string/dist"
+                android:paddingStart="5dp"
+                android:paddingEnd="0dp"
+                android:text="@string/zero"
+                android:textColor="?android:attr/colorForegroundInverse"
+                android:textSize="44sp"
+                />
+
+
+
+        </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="60dp"
@@ -559,11 +611,45 @@
                     />
             </RadioGroup>
 
+            <RadioGroup
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.25"
+                >
+
+                <TextView
+                    android:id="@+id/dist_format"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/dist_format"
+                    android:textColor="?android:attr/colorForegroundInverse"
+                    />
+
+                <RadioButton
+                    android:id="@+id/dist_format_miles"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="@color/colorAccent"
+                    android:checked="true"
+                    android:text="@string/miles"
+                    android:textColor="?android:attr/colorForegroundInverse"
+                    />
+
+                <RadioButton
+                    android:id="@+id/dist_format_kilometers"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="@color/colorAccent"
+                    android:text="@string/kilometers"
+                    android:textColor="?android:attr/colorForegroundInverse"
+                    />
+            </RadioGroup>
+
             <Button
                 android:id="@+id/pipButton"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight=".75"
+                android:layout_weight=".50"
                 android:text="@string/pip"
                 />
 

@@ -24,6 +24,7 @@ import kotlinx.android.synthetic.main.floating_ech_stats.view.ic_back_float
 import kotlinx.android.synthetic.main.floating_ech_stats.view.ic_reset_stats
 import kotlinx.android.synthetic.main.floating_ech_stats.view.ic_reset_time
 import kotlinx.android.synthetic.main.floating_ech_stats.view.kcal_float
+import kotlinx.android.synthetic.main.floating_ech_stats.view.dist_float
 import kotlinx.android.synthetic.main.floating_ech_stats.view.max_cadence_float
 import kotlinx.android.synthetic.main.floating_ech_stats.view.max_power_float
 import kotlinx.android.synthetic.main.floating_ech_stats.view.max_resistance_float
@@ -183,6 +184,7 @@ class ECHStatsFloating constructor(private val context: Context) {
                 max_power_float.text = intent.getStringExtra("power_max")
                 time_float.text = intent.getStringExtra("time")
                 kcal_float.text = intent.getStringExtra("kcal")
+                dist_float.text = intent.getStringExtra("dist")
             }
         }
     }

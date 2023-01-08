@@ -6,6 +6,7 @@
     <string name="power">Power</string>
     <string name="time">Time</string>
     <string name="kcal">KCal</string>
+    <string name="dist">Dist</string>
     <string name="cadence">Cadence</string>
     <string name="reset_stats">Reset Stats</string>
     <string name="reset_time">Reset Time</string>
@@ -16,6 +17,9 @@
     <string name="max">Max</string>
     <string name="echelon">Echelon</string>
     <string name="peloton">Peloton</string>
+    <string name="miles">Miles</string>
+    <string name="kilometers">Kilometers</string>
     <string name="zero">0</string>
     <string name="stats_format">Stats Format</string>
+    <string name="dist_format">Distance Format</string>
 </resources>

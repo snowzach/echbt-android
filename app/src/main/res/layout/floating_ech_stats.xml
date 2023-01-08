@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="400dp"
-    android:layout_height="300dp"
+    android:layout_height="340dp"
     android:background="#CC000000"
     >
 
@@ -337,6 +337,34 @@
                 android:layout_height="wrap_content"
                 android:layout_weight=".75"
                 android:contentDescription="@string/kcal"
+                android:textAlignment="center"
+                android:textColor="@android:color/background_light"
+                android:textSize="30sp"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="3dp"
+            >
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ic_dist_float"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".25"
+                android:contentDescription="@string/dist"
+                app:srcCompat="@mipmap/ic_dist"
+                />
+
+            <TextView
+                android:id="@+id/dist_float"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight=".75"
+                android:contentDescription="@string/dist"
                 android:textAlignment="center"
                 android:textColor="@android:color/background_light"
                 android:textSize="30sp"

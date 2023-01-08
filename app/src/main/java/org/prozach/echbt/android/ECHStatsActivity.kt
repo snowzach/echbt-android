@@ -29,12 +29,15 @@ import kotlinx.android.synthetic.main.activity_ech_stats.power_avg
 import kotlinx.android.synthetic.main.activity_ech_stats.power_max
 import kotlinx.android.synthetic.main.activity_ech_stats.pipButton
 import kotlinx.android.synthetic.main.activity_ech_stats.kcal
+import kotlinx.android.synthetic.main.activity_ech_stats.dist
 import kotlinx.android.synthetic.main.activity_ech_stats.pip_help
 import kotlinx.android.synthetic.main.activity_ech_stats.reset_stats
 import kotlinx.android.synthetic.main.activity_ech_stats.reset_time
 import kotlinx.android.synthetic.main.activity_ech_stats.stats_format
 import kotlinx.android.synthetic.main.activity_ech_stats.stats_format_echelon
 import kotlinx.android.synthetic.main.activity_ech_stats.stats_format_peleton
+import kotlinx.android.synthetic.main.activity_ech_stats.dist_format_miles
+import kotlinx.android.synthetic.main.activity_ech_stats.dist_format_kilometers
 import kotlinx.android.synthetic.main.activity_ech_stats.time
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -124,6 +127,12 @@ class ECHStatsActivity : AppCompatActivity() {
         stats_format_peleton.setOnClickListener{
             statsService?.setStatsFormat(ECHStatsService.StatsFormat.PELOTON)
         }
+        dist_format_miles.setOnClickListener{
+            statsService?.setDistFormat(ECHStatsService.DistFormat.MILES)
+        }
+        dist_format_kilometers.setOnClickListener{
+            statsService?.setDistFormat(ECHStatsService.DistFormat.KILOMETERS)
+        }
     }
 
     private val broadcastHandler: BroadcastReceiver = object : BroadcastReceiver() {
@@ -141,6 +150,7 @@ class ECHStatsActivity : AppCompatActivity() {
                 power_max.text = intent.getStringExtra("power_max")
                 time.text = intent.getStringExtra("time")
                 kcal.text = intent.getStringExtra("kcal")
+                dist.text = intent.getStringExtra("dist")
 
                 var statsFormat = intent.getStringExtra("stats_format")
                 if(statsFormat != "") {
@@ -151,6 +161,17 @@ class ECHStatsActivity : AppCompatActivity() {
                     if(statsFormat == "peloton" && !stats_format_peleton.isChecked) {
                         stats_format_echelon.isChecked = false
                         stats_format_peleton.isChecked = true
+                    }
+                }
+                var distFormat = intent.getStringExtra("dist_format")
+                if(distFormat != "") {
+                    if(distFormat == "miles" && !dist_format_miles.isChecked) {
+                        dist_format_miles.isChecked = true
+                        dist_format_kilometers.isChecked = false
+                    }
+                    if(distFormat == "kilometers" && !dist_format_kilometers.isChecked) {
+                        dist_format_miles.isChecked = false
+                        dist_format_kilometers.isChecked = true
                     }
                 }
             }
