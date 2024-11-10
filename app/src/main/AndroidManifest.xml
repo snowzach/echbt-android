@@ -3,7 +3,6 @@
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="org.prozach.echbt.android"
     >
 
     <uses-permission android:name="android.permission.BLUETOOTH" />

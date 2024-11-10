@@ -178,6 +178,7 @@ class ECHStatsActivity : AppCompatActivity() {
         }
     }
 
+    @Deprecated
     override fun onBackPressed() {
         statsService?.shutdown()
         super.onBackPressed() // Don't call this

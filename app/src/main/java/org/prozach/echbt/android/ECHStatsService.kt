@@ -12,9 +12,6 @@ import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
-import kotlinx.android.synthetic.main.activity_ech_stats.stats_format_echelon
-import kotlinx.android.synthetic.main.activity_ech_stats.stats_format_peleton
-import org.jetbrains.anko.notificationManager
 import org.prozach.echbt.android.ble.ConnectionEventListener
 import org.prozach.echbt.android.ble.ConnectionManager
 import org.prozach.echbt.android.ble.toHexString
