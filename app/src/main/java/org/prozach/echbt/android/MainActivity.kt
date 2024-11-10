@@ -16,6 +16,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.ParcelUuid
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -23,11 +24,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
-import kotlinx.android.synthetic.main.activity_main.scan_button
-import kotlinx.android.synthetic.main.activity_main.scan_results_recycler_view
-import org.jetbrains.anko.alert
 import org.prozach.echbt.android.ble.ConnectionEventListener
 import org.prozach.echbt.android.ble.ConnectionManager
+import org.prozach.echbt.android.databinding.ActivityMainBinding
 import timber.log.Timber
 
 
@@ -39,6 +38,8 @@ class MainActivity : AppCompatActivity() {
     /*******************************************
      * Properties
      *******************************************/
+
+    private lateinit var binding: ActivityMainBinding
 
     // This is the list of UUIDs associated with t
     private val deviceUUIDs: Array<String> = arrayOf("0bf669f0-45f2-11e7-9598-0800200c9a66")
@@ -59,7 +60,7 @@ class MainActivity : AppCompatActivity() {
     private var isScanning = false
         set(value) {
             field = value
-            runOnUiThread { scan_button.text = if (value) "Stop Scan" else "Start Scan" }
+            runOnUiThread { binding.scanButton.text = if (value) "Stop Scan" else "Start Scan" }
         }
 
     private val scanResults = mutableListOf<ScanResult>()
@@ -75,16 +76,24 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private val isLocationPermissionGranted
-        get() = hasPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+    private fun isBluetoothPermissionsGranted(context: Context): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            ContextCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED &&
+            ContextCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_SCAN) == PackageManager.PERMISSION_GRANTED
+        } else {
+            ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }
-        scan_button.setOnClickListener { if (isScanning) stopBleScan() else startBleScan() }
+        binding.scanButton.setOnClickListener { if (isScanning) stopBleScan() else startBleScan() }
         setupRecyclerView()
     }
 
@@ -107,22 +116,22 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        when (requestCode) {
-            LOCATION_PERMISSION_REQUEST_CODE -> {
-                if (grantResults.firstOrNull() == PackageManager.PERMISSION_DENIED) {
-                    requestLocationPermission()
-                } else {
-                    startBleScan()
-                }
-            }
-        }
-    }
+//    override fun onRequestPermissionsResult(
+//        requestCode: Int,
+//        permissions: Array<out String>,
+//        grantResults: IntArray
+//    ) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+//        when (requestCode) {
+//            LOCATION_PERMISSION_REQUEST_CODE -> {
+//                if (grantResults.firstOrNull() == PackageManager.PERMISSION_DENIED) {
+//                    requestLocationPermission()
+//                } else {
+//                    startBleScan()
+//                }
+//            }
+//        }
+//    }
 
     /*******************************************
      * Private functions
@@ -136,7 +145,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun startBleScan() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !isLocationPermissionGranted) {
+        if (!isBluetoothPermissionsGranted(this)) {
             requestLocationPermission()
         } else {
             var filters = ArrayList<android.bluetooth.le.ScanFilter>()
@@ -159,27 +168,50 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun requestLocationPermission() {
-        if (isLocationPermissionGranted) {
+        if (isBluetoothPermissionsGranted(this)) {
             return
         }
         runOnUiThread {
-            alert {
-                title = "Location permission required"
-                message = "Starting from Android M (6.0), the system requires apps to be granted " +
-                    "location access in order to scan for BLE devices."
-                isCancelable = false
-                positiveButton(android.R.string.ok) {
+            AlertDialog.Builder(this)
+                .setTitle("Location permission required")
+                .setMessage("Starting from Android M (6.0), the system requires apps to be granted " +
+                    "location access in order to scan for BLE devices.")
+                .setPositiveButton("OK") { dialog, _ ->
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        val permissions = mutableSetOf(
+                            Manifest.permission.BLUETOOTH,
+                            Manifest.permission.BLUETOOTH_ADMIN,
+                            Manifest.permission.ACCESS_COARSE_LOCATION,
+                            Manifest.permission.ACCESS_FINE_LOCATION,
+                        )
+
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                            permissions.add(Manifest.permission.BLUETOOTH_CONNECT)
+                            permissions.add(Manifest.permission.BLUETOOTH_SCAN)
+                        }
+
+                        ActivityCompat.requestPermissions(
+                            this, permissions.toTypedArray(), 600
+                        )
+                    }
+
+
                     requestPermission(
                         Manifest.permission.ACCESS_FINE_LOCATION,
                         LOCATION_PERMISSION_REQUEST_CODE
                     )
+                    dialog.dismiss()
                 }
-            }.show()
+//                .setNegativeButton("Cancel") { dialog, _ ->
+//                    // Handle Cancel button click
+//                    dialog.dismiss()
+//                }
+                .show()
         }
     }
 
     private fun setupRecyclerView() {
-        scan_results_recycler_view.apply {
+        binding.scanResultsRecyclerView.apply {
             adapter = scanResultAdapter
             layoutManager = LinearLayoutManager(
                 this@MainActivity,
@@ -189,7 +221,7 @@ class MainActivity : AppCompatActivity() {
             isNestedScrollingEnabled = false
         }
 
-        val animator = scan_results_recycler_view.itemAnimator
+        val animator = binding.scanResultsRecyclerView.itemAnimator
         if (animator is SimpleItemAnimator) {
             animator.supportsChangeAnimations = false
         }

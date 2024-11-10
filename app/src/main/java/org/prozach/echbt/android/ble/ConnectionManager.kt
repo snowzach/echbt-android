@@ -319,6 +319,9 @@ object ConnectionManager {
             is MtuRequest -> with(operation) {
                 gatt.requestMtu(mtu)
             }
+            else -> with(operation) {
+                signalEndOfOperation()
+            }
         }
     }
 

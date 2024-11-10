@@ -3,6 +3,8 @@ package org.prozach.echbt.android
 import android.content.BroadcastReceiver
 import android.content.ComponentName
 import android.content.Context
+import android.content.Context.RECEIVER_EXPORTED
+import android.content.Context.RECEIVER_NOT_EXPORTED
 import android.content.Context.WINDOW_SERVICE
 import android.content.Intent
 import android.content.IntentFilter
@@ -13,23 +15,8 @@ import android.os.IBinder
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat.startActivity
-import kotlinx.android.synthetic.main.floating_ech_stats.view.avg_cadence_float
-import kotlinx.android.synthetic.main.floating_ech_stats.view.avg_power_float
-import kotlinx.android.synthetic.main.floating_ech_stats.view.avg_resistance_float
 import kotlin.math.abs
-import kotlinx.android.synthetic.main.floating_ech_stats.view.resistance_float
-import kotlinx.android.synthetic.main.floating_ech_stats.view.power_float
-import kotlinx.android.synthetic.main.floating_ech_stats.view.cadence_float
-import kotlinx.android.synthetic.main.floating_ech_stats.view.ic_back_float
-import kotlinx.android.synthetic.main.floating_ech_stats.view.ic_reset_stats
-import kotlinx.android.synthetic.main.floating_ech_stats.view.ic_reset_time
-import kotlinx.android.synthetic.main.floating_ech_stats.view.kcal_float
-import kotlinx.android.synthetic.main.floating_ech_stats.view.dist_float
-import kotlinx.android.synthetic.main.floating_ech_stats.view.max_cadence_float
-import kotlinx.android.synthetic.main.floating_ech_stats.view.max_power_float
-import kotlinx.android.synthetic.main.floating_ech_stats.view.max_resistance_float
-import kotlinx.android.synthetic.main.floating_ech_stats.view.time_float
-import kotlinx.android.synthetic.main.floating_ech_stats.view.title_float
+import org.prozach.echbt.android.databinding.FloatingEchStatsBinding
 
 class ECHStatsFloating constructor(private val context: Context) {
 
@@ -39,8 +26,9 @@ class ECHStatsFloating constructor(private val context: Context) {
             return field
         }
 
-    private var floatView: View =
-        LayoutInflater.from(context).inflate(R.layout.floating_ech_stats, null)
+    private var _binding: FloatingEchStatsBinding? = FloatingEchStatsBinding.inflate(LayoutInflater.from(context), null, false)
+    private val binding get() = _binding!!
+    private var floatView = binding.root
 
     private lateinit var layoutParams: WindowManager.LayoutParams
 
@@ -107,18 +95,18 @@ class ECHStatsFloating constructor(private val context: Context) {
 
     init {
         with(floatView) {
-            ic_back_float.setOnClickListener {
+            binding.icBackFloat.setOnClickListener {
                 val intent = Intent(context, ECHStatsActivity::class.java)
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(context, intent, null)
                 dismiss()
             }
 
-            ic_reset_stats.setOnClickListener {
+            binding.icResetStats.setOnClickListener {
                 statsService?.clearStats()
             }
 
-            ic_reset_time.setOnClickListener {
+            binding.icResetTime.setOnClickListener {
                 statsService?.clearTime()
             }
         }
@@ -149,7 +137,11 @@ class ECHStatsFloating constructor(private val context: Context) {
             windowManager?.addView(floatView, layoutParams)
             val filter = IntentFilter()
             filter.addAction("com.prozach.echbt.android.stats")
-            context.registerReceiver(broadcastHandler, filter)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                context.registerReceiver(broadcastHandler, filter, RECEIVER_EXPORTED)
+            } else {
+                context.registerReceiver(broadcastHandler, filter)
+            }
         }
         val intent = Intent(context, ECHStatsService::class.java)
         context.bindService(intent, ECHStatsServiceConnection, AppCompatActivity.BIND_AUTO_CREATE)
@@ -173,18 +165,18 @@ class ECHStatsFloating constructor(private val context: Context) {
                 return;
             }
             with(floatView) {
-                cadence_float.text = intent.getStringExtra("cadence")
-                avg_cadence_float.text = intent.getStringExtra("cadence_avg")
-                max_cadence_float.text = intent.getStringExtra("cadence_max")
-                resistance_float.text = intent.getStringExtra("resistance")
-                avg_resistance_float.text = intent.getStringExtra("resistance_avg")
-                max_resistance_float.text = intent.getStringExtra("resistance_max")
-                power_float.text = intent.getStringExtra("power")
-                avg_power_float.text = intent.getStringExtra("power_avg")
-                max_power_float.text = intent.getStringExtra("power_max")
-                time_float.text = intent.getStringExtra("time")
-                kcal_float.text = intent.getStringExtra("kcal")
-                dist_float.text = intent.getStringExtra("dist")
+                binding.cadenceFloat.text = intent.getStringExtra("cadence")
+                binding.avgCadenceFloat.text = intent.getStringExtra("cadence_avg")
+                binding.maxCadenceFloat.text = intent.getStringExtra("cadence_max")
+                binding.resistanceFloat.text = intent.getStringExtra("resistance")
+                binding.avgResistanceFloat.text = intent.getStringExtra("resistance_avg")
+                binding.maxResistanceFloat.text = intent.getStringExtra("resistance_max")
+                binding.powerFloat.text = intent.getStringExtra("power")
+                binding.avgPowerFloat.text = intent.getStringExtra("power_avg")
+                binding.maxPowerFloat.text = intent.getStringExtra("power_max")
+                binding.timeFloat.text = intent.getStringExtra("time")
+                binding.kcalFloat.text = intent.getStringExtra("kcal")
+                binding.distFloat.text = intent.getStringExtra("dist")
             }
         }
     }
