@@ -137,7 +137,11 @@ class ECHStatsFloating constructor(private val context: Context) {
             windowManager?.addView(floatView, layoutParams)
             val filter = IntentFilter()
             filter.addAction("com.prozach.echbt.android.stats")
-            context.registerReceiver(broadcastHandler, filter, RECEIVER_EXPORTED)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                context.registerReceiver(broadcastHandler, filter, RECEIVER_EXPORTED)
+            } else {
+                context.registerReceiver(broadcastHandler, filter)
+            }
         }
         val intent = Intent(context, ECHStatsService::class.java)
         context.bindService(intent, ECHStatsServiceConnection, AppCompatActivity.BIND_AUTO_CREATE)

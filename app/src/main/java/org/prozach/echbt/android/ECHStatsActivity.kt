@@ -62,7 +62,11 @@ class ECHStatsActivity : AppCompatActivity() {
 
         val filter = IntentFilter()
         filter.addAction("com.prozach.echbt.android.stats")
-        registerReceiver(broadcastHandler, filter, RECEIVER_EXPORTED)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            registerReceiver(broadcastHandler, filter, RECEIVER_EXPORTED)
+        } else {
+            registerReceiver(broadcastHandler, filter)
+        }
         receiverRegistered = true
 
         ECHStatsFloating = ECHStatsFloating(applicationContext)

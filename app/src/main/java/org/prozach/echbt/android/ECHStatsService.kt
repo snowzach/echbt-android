@@ -146,7 +146,12 @@ class ECHStatsService : Service() {
             .setSmallIcon(R.mipmap.ic_cadence_white)
             .setContentIntent(pendingIntent)
             .build()
-        startForeground(1, notification, FOREGROUND_SERVICE_TYPE_DATA_SYNC)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            startForeground(1, notification)
+        } else {
+            startForeground(1, notification, FOREGROUND_SERVICE_TYPE_DATA_SYNC)
+        }
+
 
         ConnectionManager.registerListener(connectionEventListener)
         device = intent?.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
