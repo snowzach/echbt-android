@@ -14,37 +14,14 @@ import android.os.IBinder
 import android.provider.Settings
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_ech_stats.log_scroll_view
-import kotlinx.android.synthetic.main.activity_ech_stats.log_text_view
-import kotlinx.android.synthetic.main.activity_ech_stats.cadence
-import kotlinx.android.synthetic.main.activity_ech_stats.cadence_avg
-import kotlinx.android.synthetic.main.activity_ech_stats.cadence_max
-import kotlinx.android.synthetic.main.activity_ech_stats.ic_reset_stats
-import kotlinx.android.synthetic.main.activity_ech_stats.ic_reset_time
-import kotlinx.android.synthetic.main.activity_ech_stats.resistance
-import kotlinx.android.synthetic.main.activity_ech_stats.resistance_avg
-import kotlinx.android.synthetic.main.activity_ech_stats.resistance_max
-import kotlinx.android.synthetic.main.activity_ech_stats.power
-import kotlinx.android.synthetic.main.activity_ech_stats.power_avg
-import kotlinx.android.synthetic.main.activity_ech_stats.power_max
-import kotlinx.android.synthetic.main.activity_ech_stats.pipButton
-import kotlinx.android.synthetic.main.activity_ech_stats.kcal
-import kotlinx.android.synthetic.main.activity_ech_stats.dist
-import kotlinx.android.synthetic.main.activity_ech_stats.pip_help
-import kotlinx.android.synthetic.main.activity_ech_stats.reset_stats
-import kotlinx.android.synthetic.main.activity_ech_stats.reset_time
-import kotlinx.android.synthetic.main.activity_ech_stats.stats_format
-import kotlinx.android.synthetic.main.activity_ech_stats.stats_format_echelon
-import kotlinx.android.synthetic.main.activity_ech_stats.stats_format_peleton
-import kotlinx.android.synthetic.main.activity_ech_stats.dist_format_miles
-import kotlinx.android.synthetic.main.activity_ech_stats.dist_format_kilometers
-import kotlinx.android.synthetic.main.activity_ech_stats.time
+import org.prozach.echbt.android.databinding.ActivityEchStatsBinding
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
 class ECHStatsActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityEchStatsBinding
     private lateinit var ECHStatsFloating: ECHStatsFloating
     private var floatingWindowShown: Boolean = false
 
@@ -76,19 +53,21 @@ class ECHStatsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         println("ONCREATE")
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_ech_stats)
+        binding = ActivityEchStatsBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
         var intent = Intent(this, ECHStatsService::class.java)
         bindService(intent, ECHStatsServiceConnection, BIND_AUTO_CREATE)
 
         val filter = IntentFilter()
         filter.addAction("com.prozach.echbt.android.stats")
-        registerReceiver(broadcastHandler, filter)
+        registerReceiver(broadcastHandler, filter, RECEIVER_EXPORTED)
         receiverRegistered = true
 
         ECHStatsFloating = ECHStatsFloating(applicationContext)
 
-        pipButton.setOnClickListener {
+        binding.pipButton.setOnClickListener {
             if (canDrawOverlays) {
                 ECHStatsFloating.show()
                 floatingWindowShown = true
@@ -104,33 +83,33 @@ class ECHStatsActivity : AppCompatActivity() {
         }
 
         if (canDrawOverlays) {
-            pip_help.visibility = View.INVISIBLE
+            binding.pipHelp.visibility = View.INVISIBLE
         } else {
-            pip_help.visibility = View.VISIBLE
+            binding.pipHelp.visibility = View.VISIBLE
         }
 
-        ic_reset_stats.setOnClickListener{
+        binding.icResetStats.setOnClickListener{
             statsService?.clearStats()
         }
-        reset_stats.setOnClickListener{
+        binding.resetStats.setOnClickListener{
             statsService?.clearStats()
         }
-        ic_reset_time.setOnClickListener{
+        binding.icResetTime.setOnClickListener{
             statsService?.clearStats()
         }
-        reset_time.setOnClickListener{
+        binding.resetTime.setOnClickListener{
             statsService?.clearTime()
         }
-        stats_format_echelon.setOnClickListener{
+        binding.statsFormatEchelon.setOnClickListener{
             statsService?.setStatsFormat(ECHStatsService.StatsFormat.ECHELON)
         }
-        stats_format_peleton.setOnClickListener{
+        binding.statsFormatPeleton.setOnClickListener{
             statsService?.setStatsFormat(ECHStatsService.StatsFormat.PELOTON)
         }
-        dist_format_miles.setOnClickListener{
+        binding.distFormatMiles.setOnClickListener{
             statsService?.setDistFormat(ECHStatsService.DistFormat.MILES)
         }
-        dist_format_kilometers.setOnClickListener{
+        binding.distFormatKilometers.setOnClickListener{
             statsService?.setDistFormat(ECHStatsService.DistFormat.KILOMETERS)
         }
     }
@@ -139,46 +118,45 @@ class ECHStatsActivity : AppCompatActivity() {
         override fun onReceive(context: Context, intent: Intent) {
             println("onReceive")
             runOnUiThread {
-                cadence.text = intent.getStringExtra("cadence")
-                cadence_avg.text = intent.getStringExtra("cadence_avg")
-                cadence_max.text = intent.getStringExtra("cadence_max")
-                resistance.text = intent.getStringExtra("resistance")
-                resistance_avg.text = intent.getStringExtra("resistance_avg")
-                resistance_max.text = intent.getStringExtra("resistance_max")
-                power.text = intent.getStringExtra("power")
-                power_avg.text = intent.getStringExtra("power_avg")
-                power_max.text = intent.getStringExtra("power_max")
-                time.text = intent.getStringExtra("time")
-                kcal.text = intent.getStringExtra("kcal")
-                dist.text = intent.getStringExtra("dist")
+                binding.cadence.text = intent.getStringExtra("cadence")
+                binding.cadenceAvg.text = intent.getStringExtra("cadence_avg")
+                binding.cadenceMax.text = intent.getStringExtra("cadence_max")
+                binding.resistance.text = intent.getStringExtra("resistance")
+                binding.resistanceAvg.text = intent.getStringExtra("resistance_avg")
+                binding.resistanceMax.text = intent.getStringExtra("resistance_max")
+                binding.power.text = intent.getStringExtra("power")
+                binding.powerAvg.text = intent.getStringExtra("power_avg")
+                binding.powerMax.text = intent.getStringExtra("power_max")
+                binding.time.text = intent.getStringExtra("time")
+                binding.kcal.text = intent.getStringExtra("kcal")
+                binding.dist.text = intent.getStringExtra("dist")
 
                 var statsFormat = intent.getStringExtra("stats_format")
                 if(statsFormat != "") {
-                    if(statsFormat == "echelon" && !stats_format_echelon.isChecked) {
-                        stats_format_echelon.isChecked = true
-                        stats_format_peleton.isChecked = false
+                    if(statsFormat == "echelon" && !binding.statsFormatEchelon.isChecked) {
+                        binding.statsFormatEchelon.isChecked = true
+                        binding.statsFormatPeleton.isChecked = false
                     }
-                    if(statsFormat == "peloton" && !stats_format_peleton.isChecked) {
-                        stats_format_echelon.isChecked = false
-                        stats_format_peleton.isChecked = true
+                    if(statsFormat == "peloton" && !binding.statsFormatPeleton.isChecked) {
+                        binding.statsFormatEchelon.isChecked = false
+                        binding.statsFormatPeleton.isChecked = true
                     }
                 }
                 var distFormat = intent.getStringExtra("dist_format")
                 if(distFormat != "") {
-                    if(distFormat == "miles" && !dist_format_miles.isChecked) {
-                        dist_format_miles.isChecked = true
-                        dist_format_kilometers.isChecked = false
+                    if(distFormat == "miles" && !binding.distFormatMiles.isChecked) {
+                        binding.distFormatMiles.isChecked = true
+                        binding.distFormatKilometers.isChecked = false
                     }
-                    if(distFormat == "kilometers" && !dist_format_kilometers.isChecked) {
-                        dist_format_miles.isChecked = false
-                        dist_format_kilometers.isChecked = true
+                    if(distFormat == "kilometers" && !binding.distFormatKilometers.isChecked) {
+                        binding.distFormatMiles.isChecked = false
+                        binding.distFormatKilometers.isChecked = true
                     }
                 }
             }
         }
     }
 
-    @Deprecated
     override fun onBackPressed() {
         statsService?.shutdown()
         super.onBackPressed() // Don't call this
@@ -247,13 +225,13 @@ class ECHStatsActivity : AppCompatActivity() {
     private fun log(message: String) {
         val formattedMessage = String.format("%s: %s", dateFormatter.format(Date()), message)
         runOnUiThread {
-            val currentLogText = if (log_text_view.text.isEmpty()) {
+            val currentLogText = if (binding.logTextView.text.isEmpty()) {
                 "Beginning of log."
             } else {
-                log_text_view.text
+                binding.logTextView.text
             }
-            log_text_view.text = "$currentLogText\n$formattedMessage"
-            log_scroll_view.post { log_scroll_view.fullScroll(View.FOCUS_DOWN) }
+            binding.logTextView.text = "$currentLogText\n$formattedMessage"
+            binding.logScrollView.post { binding.logScrollView.fullScroll(View.FOCUS_DOWN) }
         }
     }
 }

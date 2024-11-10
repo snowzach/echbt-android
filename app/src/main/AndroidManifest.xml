@@ -7,10 +7,14 @@
 
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN"
+        android:usesPermissionFlags="neverForLocation" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
 
     <uses-feature
         android:name="android.hardware.bluetooth_le"
@@ -48,7 +52,13 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".ECHStatsService" android:icon="@drawable/ic_close_white_24dp" android:label="@string/app_name" android:launchMode="singleTop" android:enabled="true"/>
+        <service android:name=".ECHStatsService"
+            android:icon="@drawable/ic_close_white_24dp"
+            android:label="@string/app_name"
+            android:launchMode="singleTop"
+            android:enabled="true"
+            android:foregroundServiceType="dataSync"
+        />
     </application>
 
 </manifest>

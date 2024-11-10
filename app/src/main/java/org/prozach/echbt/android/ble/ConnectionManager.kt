@@ -377,7 +377,6 @@ object ConnectionManager {
             }
         }
 
-        @Deprecated
         override fun onCharacteristicRead(
             gatt: BluetoothGatt,
             characteristic: BluetoothGattCharacteristic,
@@ -428,7 +427,6 @@ object ConnectionManager {
             }
         }
 
-        @Deprecated
         override fun onCharacteristicChanged(
             gatt: BluetoothGatt,
             characteristic: BluetoothGattCharacteristic
@@ -439,7 +437,6 @@ object ConnectionManager {
             }
         }
 
-        @Deprecated
         override fun onDescriptorRead(
             gatt: BluetoothGatt,
             descriptor: BluetoothGattDescriptor,

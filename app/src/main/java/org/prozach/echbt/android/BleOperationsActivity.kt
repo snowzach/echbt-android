@@ -1,5 +1,6 @@
 package org.prozach.echbt.android
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.bluetooth.BluetoothDevice
@@ -10,6 +11,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,15 +24,7 @@ import org.prozach.echbt.android.ble.isReadable
 import org.prozach.echbt.android.ble.isWritable
 import org.prozach.echbt.android.ble.isWritableWithoutResponse
 import org.prozach.echbt.android.ble.toHexString
-import kotlinx.android.synthetic.main.activity_ble_operations.characteristics_recycler_view
-import kotlinx.android.synthetic.main.activity_ble_operations.log_scroll_view
-import kotlinx.android.synthetic.main.activity_ble_operations.log_text_view
-import kotlinx.android.synthetic.main.activity_ble_operations.mtu_field
-import kotlinx.android.synthetic.main.activity_ble_operations.request_mtu_button
-import org.jetbrains.anko.alert
-import org.jetbrains.anko.noButton
-import org.jetbrains.anko.selector
-import org.jetbrains.anko.yesButton
+import org.prozach.echbt.android.databinding.ActivityBleOperationsBinding
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -38,6 +32,7 @@ import java.util.UUID
 
 class BleOperationsActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityBleOperationsBinding
     private lateinit var device: BluetoothDevice
     private val dateFormatter = SimpleDateFormat("MMM d, HH:mm:ss", Locale.US)
     private val characteristics by lazy {
@@ -68,6 +63,9 @@ class BleOperationsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         ConnectionManager.registerListener(connectionEventListener)
         super.onCreate(savedInstanceState)
+        binding = ActivityBleOperationsBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
         device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
             ?: error("Missing BluetoothDevice from MainActivity!")
 
@@ -78,12 +76,12 @@ class BleOperationsActivity : AppCompatActivity() {
             title = getString(R.string.echbt_dash)
         }
         setupRecyclerView()
-        request_mtu_button.setOnClickListener {
-            if (mtu_field.text.isNotEmpty() && mtu_field.text.isNotBlank()) {
-                mtu_field.text.toString().toIntOrNull()?.let { mtu ->
+        binding.requestMtuButton.setOnClickListener {
+            if (binding.mtuField.text.isNotEmpty() && binding.mtuField.text.isNotBlank()) {
+                binding.mtuField.text.toString().toIntOrNull()?.let { mtu ->
                     log("Requesting for MTU value of $mtu")
                     ConnectionManager.requestMtu(device, mtu)
-                } ?: log("Invalid MTU value: ${mtu_field.text}")
+                } ?: log("Invalid MTU value: ${binding.mtuField.text}")
             } else {
                 log("Please specify a numeric value for desired ATT MTU (23-517)")
             }
@@ -108,7 +106,7 @@ class BleOperationsActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView() {
-        characteristics_recycler_view.apply {
+        binding.characteristicsRecyclerView.apply {
             adapter = characteristicAdapter
             layoutManager = LinearLayoutManager(
                 this@BleOperationsActivity,
@@ -118,7 +116,7 @@ class BleOperationsActivity : AppCompatActivity() {
             isNestedScrollingEnabled = false
         }
 
-        val animator = characteristics_recycler_view.itemAnimator
+        val animator = binding.characteristicsRecyclerView.itemAnimator
         if (animator is SimpleItemAnimator) {
             animator.supportsChangeAnimations = false
         }
@@ -128,48 +126,48 @@ class BleOperationsActivity : AppCompatActivity() {
     private fun log(message: String) {
         val formattedMessage = String.format("%s: %s", dateFormatter.format(Date()), message)
         runOnUiThread {
-            val currentLogText = if (log_text_view.text.isEmpty()) {
+            val currentLogText = if (binding.logTextView.text.isEmpty()) {
                 "Beginning of log."
             } else {
-                log_text_view.text
+                binding.logTextView.text
             }
-            log_text_view.text = "$currentLogText\n$formattedMessage"
-            log_scroll_view.post { log_scroll_view.fullScroll(View.FOCUS_DOWN) }
+            binding.logTextView.text = "$currentLogText\n$formattedMessage"
+            binding.logScrollView.post { binding.logScrollView.fullScroll(View.FOCUS_DOWN) }
         }
     }
 
     private fun showCharacteristicOptions(characteristic: BluetoothGattCharacteristic) {
         characteristicProperties[characteristic]?.let { properties ->
-            selector("Select an action to perform", properties.map { it.action }) { _, i ->
-                when (properties[i]) {
-                    CharacteristicProperty.Readable -> {
-                        log("Reading from ${characteristic.uuid}")
-                        ConnectionManager.readCharacteristic(device, characteristic)
-                    }
-                    CharacteristicProperty.Writable, CharacteristicProperty.WritableWithoutResponse -> {
-                        showWritePayloadDialog(characteristic)
-                    }
-                    CharacteristicProperty.Notifiable, CharacteristicProperty.Indicatable -> {
-                        if (notifyingCharacteristics.contains(characteristic.uuid)) {
-                            log("Disabling notifications on ${characteristic.uuid}")
-                            ConnectionManager.disableNotifications(device, characteristic)
-                        } else {
-                            log("Enabling notifications on ${characteristic.uuid}")
-                            ConnectionManager.enableNotifications(device, characteristic)
-                        }
-                    }
-                }
-            }
+//            selector("Select an action to perform", properties.map { it.action }) { _, i ->
+//                when (properties[i]) {
+//                    CharacteristicProperty.Readable -> {
+//                        log("Reading from ${characteristic.uuid}")
+//                        ConnectionManager.readCharacteristic(device, characteristic)
+//                    }
+//                    CharacteristicProperty.Writable, CharacteristicProperty.WritableWithoutResponse -> {
+//                        showWritePayloadDialog(characteristic)
+//                    }
+//                    CharacteristicProperty.Notifiable, CharacteristicProperty.Indicatable -> {
+//                        if (notifyingCharacteristics.contains(characteristic.uuid)) {
+//                            log("Disabling notifications on ${characteristic.uuid}")
+//                            ConnectionManager.disableNotifications(device, characteristic)
+//                        } else {
+//                            log("Enabling notifications on ${characteristic.uuid}")
+//                            ConnectionManager.enableNotifications(device, characteristic)
+//                        }
+//                    }
+//                }
+//            }
         }
     }
 
     @SuppressLint("InflateParams")
     private fun showWritePayloadDialog(characteristic: BluetoothGattCharacteristic) {
         val hexField = layoutInflater.inflate(R.layout.edittext_hex_payload, null) as EditText
-        alert {
-            customView = hexField
-            isCancelable = false
-            yesButton {
+        AlertDialog.Builder(this)
+            .setView(hexField)
+            .setCancelable(false)
+            .setPositiveButton("OK") { dialog, _ ->
                 with(hexField.text.toString()) {
                     if (isNotBlank() && isNotEmpty()) {
                         val bytes = hexToBytes()
@@ -179,22 +177,32 @@ class BleOperationsActivity : AppCompatActivity() {
                         log("Please enter a hex payload to write to ${characteristic.uuid}")
                     }
                 }
+                dialog.dismiss()
             }
-            noButton {}
-        }.show()
+//                .setNegativeButton("Cancel") { dialog, _ ->
+//                    // Handle Cancel button click
+//                    dialog.dismiss()
+//                }
+            .show()
         hexField.showKeyboard()
     }
 
     private val connectionEventListener by lazy {
         ConnectionEventListener().apply {
             onDisconnect = {
-                runOnUiThread {
-                    alert {
-                        title = "Disconnected"
-                        message = "Disconnected from device."
-                        positiveButton("OK") { onBackPressed() }
-                    }.show()
-                }
+//                runOnUiThread {
+//                    AlertDialog.Builder(Context)
+//                        .setTitle("Disconnected")
+//                        .setMessage("Disconnected from device.")
+//                        .setPositiveButton("OK") { dialog, _ ->
+//                            onBackPressed()
+//                        }
+//                    //  .setNegativeButton("Cancel") { dialog, _ ->
+//                    //  // Handle Cancel button click
+//                    //  dialog.dismiss()
+//                    //}
+//                    .show()
+//                }
             }
 
             onCharacteristicRead = { _, characteristic ->

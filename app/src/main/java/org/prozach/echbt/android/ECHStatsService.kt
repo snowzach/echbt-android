@@ -3,10 +3,14 @@ package org.prozach.echbt.android
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.app.Service
 import android.bluetooth.BluetoothDevice
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ServiceInfo
+import android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC
+import android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK
 import android.os.Binder
 import android.os.Build
 import android.os.IBinder
@@ -134,7 +138,7 @@ class ECHStatsService : Service() {
         val notificationIntent = Intent(this, ECHStatsActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(
             this,
-            0, notificationIntent, 0
+            0, notificationIntent, FLAG_IMMUTABLE
         )
         val notification = NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentTitle(this.resources.getString(R.string.app_name))
@@ -142,7 +146,7 @@ class ECHStatsService : Service() {
             .setSmallIcon(R.mipmap.ic_cadence_white)
             .setContentIntent(pendingIntent)
             .build()
-        startForeground(1, notification)
+        startForeground(1, notification, FOREGROUND_SERVICE_TYPE_DATA_SYNC)
 
         ConnectionManager.registerListener(connectionEventListener)
         device = intent?.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
